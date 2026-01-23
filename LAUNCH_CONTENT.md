@@ -1,0 +1,86 @@
+# 🎬 CineMatch - Material de Lanzamiento
+
+## Post de Lanzamiento (Twitter/X)
+
+```
+🎬 Presentamos CineMatch
+
+¿Cansado de ir solo al cine? ¿Tus amigos no entienden tu amor por el cine de autor?
+
+CineMatch conecta cinéfilos con gustos compatibles.
+
+✅ Match por géneros favoritos
+✅ Icebreakers con IA
+✅ Verificación facial
+✅ 100% gratis
+
+Probá la demo 👇
+[LINK]
+
+#CineMatch #Cine #App #Cinéfilos
+```
+
+---
+
+## Post de Lanzamiento (LinkedIn)
+
+```
+🚀 Lanzamos CineMatch: La app que conecta cinéfilos
+
+Después de meses de desarrollo, estamos emocionados de presentar CineMatch.
+
+EL PROBLEMA:
+Ir al cine es una experiencia social, pero encontrar compañeros con gustos compatibles es difícil.
+
+LA SOLUCIÓN:
+CineMatch usa un algoritmo de compatibilidad basado en:
+• Géneros favoritos
+• Intención (social, amistad, charla cinéfila)
+• Disponibilidad horaria
+
+TECNOLOGÍA:
+• React 19 + Vite
+• Google Gemini AI para icebreakers personalizados
+• Verificación facial para perfiles reales
+
+Probá la demo gratuita en: [LINK]
+
+#Startup #App #Cine #AI #React
+```
+
+---
+
+## Historia para Instagram/Stories
+
+**Slide 1:**
+🎬 ¿Alguna vez quisiste ir al cine pero no tenías con quién?
+
+**Slide 2:**
+Presentamos CineMatch
+"Encontrá tu compañero de película ideal"
+
+**Slide 3:**
+✨ ¿Cómo funciona?
+1. Elegí tus géneros favoritos
+2. Hacé swipe en perfiles
+3. ¡Match y a la sala!
+
+**Slide 4:**
+🛡️ Seguridad primero
+• Verificación facial con IA
+• Sistema de reportes
+• Ubicación aproximada
+
+**Slide 5:**
+🚀 Probá la demo GRATIS
+Link en bio
+
+---
+
+## Bullets de Valor (para landing page)
+
+1. **Match inteligente**: Nuestro algoritmo conecta personas con géneros, horarios e intenciones compatibles.
+
+2. **Icebreakers con IA**: Gemini genera frases personalizadas para romper el hielo con estilo cinéfilo.
+
+3. **Seguridad verificada**: Verificación facial, sistema de reportes y bloqueo instantáneo para una experiencia segura.

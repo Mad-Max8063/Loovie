@@ -1,8 +1,8 @@
-
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { UserProfile, Match, Message, Language } from '../types';
 import { CURRENT_USER, MOCK_USERS } from '../constants';
 import { translations } from '../translations';
+import { shouldMatch } from '../services/matchingService';
 
 interface AppContextType {
   currentUser: UserProfile;
@@ -46,18 +46,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const addLike = useCallback((id: string) => {
     setLikes(prev => new Set(prev).add(id));
     
-    if (id === 'u4' || id === 'u2') {
-      const matchedUser = MOCK_USERS.find(u => u.id === id);
-      if (matchedUser) {
-        setMatches(prev => [...prev, {
-          id: `m-${Date.now()}`,
-          users: [currentUser.id, id],
-          timestamp: Date.now()
-        }]);
-      }
+    // Smart matching based on compatibility - FIXED: define matchedUser BEFORE using it
+    const matchedUser = MOCK_USERS.find(u => u.id === id);
+    if (matchedUser && shouldMatch(currentUser, matchedUser)) {
+      setMatches(prev => [...prev, {
+        id: `m-${Date.now()}`,
+        users: [currentUser.id, id],
+        timestamp: Date.now()
+      }]);
     }
     removePotential(id);
-  }, [currentUser.id, removePotential]);
+  }, [currentUser, removePotential]);
 
   const sendMessage = useCallback((matchId: string, text: string) => {
     const newMessage: Message = {

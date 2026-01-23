@@ -1,20 +1,121 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+  <img src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" alt="CineMatch Banner" width="100%" />
+  
+  # 🎬 CineMatch
+  
+  **Encontrá tu compañero de película ideal**
+  
+  [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
+  [![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite)](https://vitejs.dev/)
+  [![Gemini AI](https://img.shields.io/badge/Gemini-AI-4285F4?logo=google)](https://ai.google.dev/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 </div>
 
-# Run and deploy your AI Studio app
+---
 
-This contains everything you need to run your app locally.
+## 🎯 El Problema
 
-View your app in AI Studio: https://ai.studio/apps/drive/1vT5_fXW9XmkeIG3XPcVwtSCf9RjWYlTW
+¿Alguna vez quisiste ir al cine pero no tenías con quién? ¿O te frustra que tus amigos no compartan tu gusto por el cine de autor, el terror extremo o las maratones de Marvel?
 
-## Run Locally
+**CineMatch** conecta cinéfilos con gustos compatibles para que nunca más vayas solo al cine.
 
-**Prerequisites:**  Node.js
+---
 
+## ✨ Solución
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Una app estilo "Tinder para el cine" donde podés:
+
+- 🎬 **Hacer match** con personas que aman los mismos géneros
+- 🗣️ **Elegir tu intención**: Salida social, amistad o charla cinéfila profunda
+- 🤖 **Recibir icebreakers** generados por IA para romper el hielo con estilo
+- 🛡️ **Verificar identidad** con tecnología de reconocimiento facial
+
+---
+
+## 🚀 Demo
+
+Probá la demo interactiva sin registrarte:
+
+```bash
+npm install
+npm run dev
+```
+
+La demo incluye 5 swipes con perfiles de ejemplo para explorar la experiencia.
+
+---
+
+## 🛠️ Tech Stack
+
+| Tecnología | Uso |
+|---|---|
+| **React 19** | UI Components |
+| **Vite 6** | Build & Dev Server |
+| **TypeScript** | Type Safety |
+| **Gemini AI** | Recomendaciones y icebreakers |
+| **Lucide React** | Iconografía |
+
+---
+
+## 📂 Estructura del Proyecto
+
+```
+cine-match/
+├── App.tsx                 # App principal con estado de demo/registro
+├── components/
+│   ├── Layout.tsx          # Navegación y estructura
+│   ├── DemoBanner.tsx      # Banner de modo demo
+│   └── ReportUserModal.tsx # Sistema de reportes
+├── views/
+│   ├── LandingView.tsx     # Pantalla inicial dual
+│   ├── ExploreView.tsx     # Swipe de perfiles
+│   ├── MatchesView.tsx     # Conversaciones
+│   ├── ProfileView.tsx     # Perfil de usuario
+│   ├── PrivacyPolicyScreen.tsx # Términos y seguridad
+│   └── IdentityVerification.tsx # Verificación facial con IA
+├── services/
+│   ├── geminiService.ts    # Integración Gemini API
+│   └── matchingService.ts  # Algoritmo de compatibilidad
+├── context/
+│   └── AppContext.tsx      # Estado global de la app
+└── constants.ts            # Datos mock y configuración
+```
+
+---
+
+## 🔐 Seguridad
+
+- ✅ Verificación facial con Gemini Vision
+- ✅ Sistema de reportes por categoría
+- ✅ Bloqueo de usuarios
+- ✅ Pantalla de términos obligatoria
+- ✅ Ubicación aproximada (nunca exacta)
+
+---
+
+## 🗺️ Roadmap
+
+- [x] MVP con matching basado en géneros
+- [x] Integración Gemini para icebreakers
+- [x] Modo demo con límite de swipes
+- [ ] Autenticación Firebase
+- [ ] Backend real con base de datos
+- [ ] Notificaciones push
+- [ ] Chat en tiempo real
+
+---
+
+## 🤝 Contribuir
+
+1. Fork este repositorio
+2. Creá tu branch (`git checkout -b feature/nueva-feature`)
+3. Commit tus cambios (`git commit -am 'Agrega nueva feature'`)
+4. Push al branch (`git push origin feature/nueva-feature`)
+5. Abrí un Pull Request
+
+---
+
+<div align="center">
+  <p>Hecho con ❤️ para cinéfilos</p>
+  <p><sub>Powered by Google Gemini AI</sub></p>
+</div>

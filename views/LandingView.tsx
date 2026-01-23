@@ -1,9 +1,13 @@
-
 import React from 'react';
 import { useAppContext } from '../context/AppContext';
-import { Clapperboard, Play, Sparkles } from 'lucide-react';
+import { Clapperboard, Play, Sparkles, UserPlus } from 'lucide-react';
 
-const LandingView: React.FC<{ onStart: () => void }> = ({ onStart }) => {
+interface LandingViewProps {
+  onStartDemo: () => void;
+  onStartRegister: () => void;
+}
+
+const LandingView: React.FC<LandingViewProps> = ({ onStartDemo, onStartRegister }) => {
   const { t } = useAppContext();
 
   return (
@@ -34,24 +38,33 @@ const LandingView: React.FC<{ onStart: () => void }> = ({ onStart }) => {
           {t('landing_tagline')}
         </p>
 
-        <div className="flex flex-col gap-4 w-full mt-4">
+        <div className="flex flex-col gap-3 w-full mt-4">
+          {/* Primary CTA - Register */}
           <button 
-            onClick={onStart}
-            className="group relative w-full py-6 bg-white text-black rounded-2xl font-black text-sm uppercase tracking-[0.3em] overflow-hidden transition-all active:scale-95 shadow-2xl"
+            onClick={onStartRegister}
+            className="group relative w-full py-5 bg-white text-black rounded-2xl font-black text-sm uppercase tracking-[0.2em] overflow-hidden transition-all active:scale-95 shadow-2xl"
           >
             <div className="absolute inset-0 bg-red-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
             <span className="relative z-10 flex items-center justify-center gap-3 group-hover:text-white transition-colors">
-              <Play size={18} fill="currentColor" />
-              {t('landing_btn')}
+              <UserPlus size={18} />
+              Crear Cuenta
             </span>
           </button>
           
-          <div className="flex items-center justify-center gap-4 text-neutral-500">
-            <div className="flex items-center gap-1">
-              <Sparkles size={12} />
-              <span className="text-[10px] font-black uppercase tracking-widest">Demo Version 1.0</span>
-            </div>
-          </div>
+          {/* Secondary CTA - Demo */}
+          <button 
+            onClick={onStartDemo}
+            className="group w-full py-4 bg-transparent border-2 border-white/30 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] transition-all active:scale-95 hover:border-white/60 hover:bg-white/5"
+          >
+            <span className="flex items-center justify-center gap-3">
+              <Sparkles size={16} />
+              Probar Demo
+            </span>
+          </button>
+          
+          <p className="text-[9px] text-neutral-500 font-bold mt-2">
+            La demo incluye perfiles de ejemplo para que explores la experiencia
+          </p>
         </div>
       </div>
 
