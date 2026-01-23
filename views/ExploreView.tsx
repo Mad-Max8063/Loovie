@@ -1,9 +1,11 @@
 
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { MapPin, Calendar, Popcorn, ShieldCheck, Clapperboard, Heart, Ticket, Sparkles } from 'lucide-react';
+import { MapPin, Calendar, Popcorn, ShieldCheck, Clapperboard, Heart, Ticket, Sparkles, Flame, Star } from 'lucide-react';
 
 const ExploreView: React.FC = () => {
+  const [swipeCount, setSwipeCount] = useState(0);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const { potentials, addLike, removePotential, t } = useAppContext();
   const [swipeState, setSwipeState] = useState<'none' | 'left' | 'right'>('none');
   const [isBurning, setIsBurning] = useState(false);
@@ -20,6 +22,8 @@ const ExploreView: React.FC = () => {
       setTimeout(() => {
         removePotential(user.id);
         setSwipeState('none');
+        setSwipeCount(prev => prev + 1);
+        if (swipeCount >= 9) setShowPremiumModal(true);
         setIsBurning(false);
       }, 400);
     }, 500); 

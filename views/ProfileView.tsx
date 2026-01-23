@@ -111,8 +111,8 @@ const ProfileView: React.FC = () => {
               </div>
 
               <div className="text-center space-y-1">
-                <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter">Tu Ticket de Invitado</h3>
-                <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-[0.2em]">CineMatch Early Access</p>
+                <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter">{t('share_title')}</h3>
+                <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-[0.2em]">{t('share_subtitle')}</p>
               </div>
             </div>
 
@@ -128,17 +128,17 @@ const ProfileView: React.FC = () => {
                     className="w-32 h-32"
                   />
                 </div>
-                <span className="text-[8px] font-black text-neutral-500 uppercase tracking-widest">Escaneame para entrar</span>
+                <span className="text-[8px] font-black text-neutral-500 uppercase tracking-widest">{t('share_qr_desc')}</span>
               </div>
 
               {/* URL y Validaciones */}
               <div className="space-y-3">
                 <div className="flex justify-between items-center px-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-[9px] font-black text-neutral-500 uppercase">Enlace del Demo</span>
+                    <span className="text-[9px] font-black text-neutral-500 uppercase">{t('share_link_label')}</span>
                     {isPrivateUrl && (
                       <span className="bg-red-600 text-white text-[7px] px-1.5 py-0.5 rounded font-black uppercase flex items-center gap-1">
-                        <AlertTriangle size={8} /> Local/Privado
+                        <AlertTriangle size={8} /> {t('share_private_tag')}
                       </span>
                     )}
                   </div>
@@ -169,7 +169,7 @@ const ProfileView: React.FC = () => {
                   <div className="p-4 bg-red-900/10 border border-red-600/20 rounded-2xl space-y-2">
                     <div className="flex items-center gap-2 text-red-500">
                       <AlertTriangle size={14} />
-                      <span className="text-[9px] font-black uppercase">¿El link no funciona?</span>
+                      <span className="text-[9px] font-black uppercase">{t('share_error_title')}</span>
                     </div>
                     <p className="text-[8px] text-neutral-400 font-bold uppercase leading-relaxed">
                       Parece que estás compartiendo una URL privada de tu editor. 
@@ -187,7 +187,7 @@ const ProfileView: React.FC = () => {
                     }`}
                   >
                     {isCopied ? <Check size={14} /> : <Copy size={14} />}
-                    {isCopied ? 'COPIADO' : 'COPIAR'}
+                    {isCopied ? t('share_copied') : t('share_copy')}
                   </button>
                   <a 
                     href={shareUrl}
@@ -195,7 +195,7 @@ const ProfileView: React.FC = () => {
                     rel="noopener noreferrer"
                     className="py-4 bg-neutral-800 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-neutral-700 transition-all active:scale-95"
                   >
-                    <ExternalLink size={14} /> PROBAR
+                    <ExternalLink size={14} /> {t('share_try')}
                   </a>
                 </div>
               </div>
@@ -204,13 +204,13 @@ const ProfileView: React.FC = () => {
               <div className="pt-2">
                 <div className="flex items-center gap-2 text-neutral-600 mb-2 px-1">
                   <HelpCircle size={12} />
-                  <span className="text-[8px] font-black uppercase tracking-widest">Guía de compartición</span>
+                  <span className="text-[8px] font-black uppercase tracking-widest">{t('share_guide_title')}</span>
                 </div>
                 <div className="text-[7px] text-neutral-500 font-bold uppercase grid grid-cols-2 gap-4 leading-tight">
-                  <p>1. Abrí el demo en una pestaña nueva.</p>
-                  <p>2. Copiá la URL de esa pestaña.</p>
-                  <p>3. Pegala acá arriba y compartí.</p>
-                  <p>4. Así te aseguras que el link funcione.</p>
+                  <p>{t('share_guide_1')} en una pestaña nueva.</p>
+                  <p>{t('share_guide_2')} de esa pestaña.</p>
+                  <p>{t('share_guide_3')} y compartí.</p>
+                  <p>{t('share_guide_4')}.</p>
                 </div>
               </div>
 
@@ -219,7 +219,7 @@ const ProfileView: React.FC = () => {
             {/* Footer del Ticket */}
             <div className="bg-[#d4af37] py-4 text-center border-t border-black/10 mt-auto flex items-center justify-center gap-3">
               <div className="w-2 h-2 rounded-full bg-black/20"></div>
-              <span className="text-[8px] font-black text-black uppercase tracking-[0.4em]">CineMatch Beta Showcase</span>
+              <span className="text-[8px] font-black text-black uppercase tracking-[0.4em]">{t('share_footer')}</span>
               <div className="w-2 h-2 rounded-full bg-black/20"></div>
             </div>
 
@@ -271,7 +271,7 @@ const ProfileView: React.FC = () => {
         <div className="bg-neutral-900/40 p-4 rounded-3xl border border-white/5 flex flex-col items-center gap-2 backdrop-blur-sm">
           <Clock className="text-red-600" size={22} />
           <span className="text-[9px] font-black uppercase text-neutral-600 tracking-widest">{t('profile_waiting')}</span>
-          <span className="font-black text-white">2 Pelis</span>
+          <span className="font-black text-white">2 {t('profile_waiting_movies')}</span>
         </div>
       </div>
 
@@ -366,7 +366,7 @@ const ProfileView: React.FC = () => {
           <Settings size={18} /> {t('profile_settings')}
         </button>
         <button onClick={logout} className="w-full py-4 bg-red-900/10 text-red-500 font-black text-[11px] uppercase tracking-widest rounded-2xl border border-red-500/20 flex items-center gap-3 justify-center hover:bg-red-900/20 transition-all">
-          Cerrar Sesión
+          {t('profile_logout')}
         </button>
       </div>
     </div>

@@ -3,8 +3,9 @@ import { UserProfile, Match, Message, Language, IntentMode } from '../types';
 import { MOCK_USERS } from '../constants';
 import { translations } from '../translations';
 import { shouldMatch } from '../services/matchingService';
-import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged } from '../services/firebase';
-
+import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '../services/firebase';
+import * as dbService from '../services/dbService';
+import * as chatService from '../services/chatService';
 interface AppContextType {
   currentUser: UserProfile | null;
   potentials: UserProfile[];
@@ -19,38 +20,52 @@ interface AppContextType {
   addLike: (id: string) => void;
   removePotential: (id: string) => void;
   sendMessage: (matchId: string, text: string) => void;
-  login: () => Promise<void>;
+  login: (method?: 'google' | 'email', email?: string, password?: string, isSignup?: boolean) => Promise<void>;
   logout: () => Promise<void>;
   isDemoMode: boolean;
   setDemoMode: (val: boolean) => void;
+  needsProfileSetup: boolean;
+  setActiveChatId: (id: string | null) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
-  const [potentials, setPotentials] = useState<UserProfile[]>(MOCK_USERS);
+  const [potentials, setPotentials] = useState<UserProfile[]>([]);
   const [likes, setLikes] = useState<Set<string>>(new Set());
   const [matches, setMatches] = useState<Match[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [language, setLanguage] = useState<Language>('es-AR');
   const [isUserVerified, setIsUserVerified] = useState(false);
   const [isDemoMode, setIsDemoMode] = useState(false);
+  const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
 
-  // Listen for auth changes
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        setCurrentUser({
-          id: firebaseUser.uid,
-          displayName: firebaseUser.displayName || 'Cinéfilo',
-          photoUrl: firebaseUser.photoURL || 'https://images.unsplash.com/photo-153571501000f-103f12a1464e?q=80&w=200&h=200&auto=format&fit=crop',
-          age: 25, // Mock age as Firebase doesn't provide it
-          bio: 'Nuevo en CineMatch. ¡Listo para la función!',
-          favoriteGenres: [],
-          availability: [],
-          intentMode: IntentMode.FRIENDSHIP
-        });
+        const profile = await dbService.getUser(firebaseUser.uid);
+        if (profile) {
+          setCurrentUser(profile);
+          setNeedsProfileSetup(false);
+          const unsubMatches = dbService.subscribeToMatches(firebaseUser.uid, (newMatches) => {
+            setMatches(newMatches);
+          });
+          return () => unsubMatches();
+        } else {
+          setCurrentUser({
+            id: firebaseUser.uid,
+            displayName: firebaseUser.displayName || 'Cinéfilo',
+            photoUrl: firebaseUser.photoURL || 'https://images.unsplash.com/photo-153571501000f-103f12a1464e?q=80&w=200&h=200&auto=format&fit=crop',
+            age: 0,
+            bio: '',
+            favoriteGenres: [],
+            availability: [],
+            intentMode: IntentMode.FRIENDSHIP
+          });
+          setNeedsProfileSetup(true);
+        }
         setIsDemoMode(false);
       } else {
         setCurrentUser(null);
@@ -60,11 +75,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return () => unsubscribe();
   }, []);
 
-  const login = async () => {
+  useEffect(() => {
+    const fetchPotentials = async () => {
+      if (currentUser && !isDemoMode) {
+        const users = await dbService.getAllUsers(currentUser.id);
+        setPotentials(users);
+      } else if (isDemoMode) {
+        setPotentials(MOCK_USERS);
+      }
+    };
+    fetchPotentials();
+  }, [currentUser, isDemoMode]);
+
+  
+
+  const login = async (method: 'google' | 'email' = 'google', email?: string, password?: string, isSignup?: boolean) => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      if (method === 'google') {
+        await signInWithPopup(auth, googleProvider);
+      } else if (method === 'email' && email && password) {
+        if (isSignup) {
+          await createUserWithEmailAndPassword(auth, email, password);
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+        }
+      }
     } catch (error) {
-      console.error("Error logging in with Google:", error);
+      console.error("Auth Error:", error);
+      throw error;
     }
   };
 
@@ -80,7 +118,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const setDemoMode = (val: boolean) => {
     setIsDemoMode(val);
     if (val) {
-      // Set a mock user for demo
       setCurrentUser({
         id: 'demo-user',
         displayName: 'Cinéfilo Demo',
@@ -91,6 +128,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         availability: ['Fines de semana'],
         intentMode: IntentMode.DEEP_TALK
       });
+      setPotentials(MOCK_USERS);
     }
   };
 
@@ -106,41 +144,48 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIsUserVerified(status);
   };
 
-  const addLike = useCallback((id: string) => {
+  const addLike = useCallback(async (id: string) => {
     setLikes(prev => new Set(prev).add(id));
-    
     if (!currentUser) return;
 
-    const matchedUser = MOCK_USERS.find(u => u.id === id);
-    if (matchedUser && shouldMatch(currentUser, matchedUser)) {
-      setMatches(prev => [...prev, {
-        id: `m-${Date.now()}-${id}`, 
-        users: [currentUser.id, id],
-        timestamp: Date.now()
-      }]);
+    if (!isDemoMode) {
+      await dbService.addLike(currentUser.id, id);
+    } else {
+      const matchedUser = MOCK_USERS.find(u => u.id === id);
+      if (matchedUser && shouldMatch(currentUser, matchedUser)) {
+        setMatches(prev => [...prev, {
+          id: `m-${Date.now()}-${id}`, 
+          users: [currentUser.id, id],
+          timestamp: Date.now()
+        }]);
+      }
     }
     removePotential(id);
-  }, [currentUser, removePotential]);
+  }, [currentUser, removePotential, isDemoMode]);
 
-  const sendMessage = useCallback((matchId: string, text: string) => {
+  const sendMessage = useCallback(async (matchId: string, text: string) => {
     if (!currentUser) return;
-    const newMessage: Message = {
-      id: `msg-${Date.now()}`, 
-      matchId,
-      senderId: currentUser.id,
-      text,
-      timestamp: Date.now()
-    };
-    setMessages(prev => [...prev, newMessage]);
-    setMatches(prev => prev.map(m => m.id === matchId ? { ...m, lastMessage: text } : m));
-  }, [currentUser]);
+    if (isDemoMode) {
+      const newMessage: Message = {
+        id: `msg-${Date.now()}`, 
+        matchId,
+        senderId: currentUser.id,
+        text,
+        timestamp: Date.now()
+      };
+      setMessages(prev => [...prev, newMessage]);
+      setMatches(prev => prev.map(m => m.id === matchId ? { ...m, lastMessage: text } : m));
+    } else {
+      await chatService.sendMessage(matchId, currentUser.id, text);
+    }
+  }, [currentUser, isDemoMode]);
 
   return (
     <AppContext.Provider value={{ 
       currentUser, potentials, likes, matches, messages, 
       language, t, setLanguage, isUserVerified, setUserVerified,
       addLike, removePotential, sendMessage, login, logout, 
-      isDemoMode, setDemoMode
+      isDemoMode, setDemoMode, needsProfileSetup, setActiveChatId
     }}>
       {children}
     </AppContext.Provider>

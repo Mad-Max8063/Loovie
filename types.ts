@@ -16,6 +16,7 @@ export interface UserProfile {
   favoriteGenres: string[];
   availability: string[];
   intentMode: IntentMode;
+  likes?: string[];
   location?: { lat: number; lng: number };
   isVerified?: boolean;
 }

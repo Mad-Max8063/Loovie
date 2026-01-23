@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" alt="CineMatch Banner" width="100%" />
   
-  # 🎬 CineMatch
+  # 🎬 Loovie
   
   **Encontrá tu compañero de película ideal**
   
@@ -17,7 +17,7 @@
 
 ¿Alguna vez quisiste ir al cine pero no tenías con quién? ¿O te frustra que tus amigos no compartan tu gusto por el cine de autor, el terror extremo o las maratones de Marvel?
 
-**CineMatch** conecta cinéfilos con gustos compatibles para que nunca más vayas solo al cine.
+**Loovie** conecta cinéfilos con gustos compatibles para que nunca más vayas solo al cine.
 
 ---
 
@@ -29,6 +29,7 @@ Una app estilo "Tinder para el cine" donde podés:
 - 🗣️ **Elegir tu intención**: Salida social, amistad o charla cinéfila profunda
 - 🤖 **Recibir icebreakers** generados por IA para romper el hielo con estilo
 - 🛡️ **Verificar identidad** con tecnología de reconocimiento facial
+- 💎 **Loovie Pro**: Período de prueba gratuito para swipes ilimitados
 
 ---
 
@@ -41,7 +42,7 @@ npm install
 npm run dev
 ```
 
-La demo incluye 5 swipes con perfiles de ejemplo para explorar la experiencia.
+La demo incluye un pase de **10 swipes** gratuitos para explorar la experiencia.
 
 ---
 
@@ -90,6 +91,7 @@ cine-match/
 - ✅ Bloqueo de usuarios
 - ✅ Pantalla de términos obligatoria
 - ✅ Ubicación aproximada (nunca exacta)
+- ✅ **Localización completa** en Castellano Argentino (Voseo)
 
 ---
 
@@ -98,7 +100,9 @@ cine-match/
 - [x] MVP con matching basado en géneros
 - [x] Integración Gemini para icebreakers
 - [x] Modo demo con límite de swipes
-- [ ] Autenticación Firebase
+- [x] Integración de Autenticación (Firebase Ready)
+- [x] Localización completa (es-AR/en-US)
+- [x] Implementación de Monetización (Trial Gate)
 - [ ] Backend real con base de datos
 - [ ] Notificaciones push
 - [ ] Chat en tiempo real
@@ -117,5 +121,5 @@ cine-match/
 
 <div align="center">
   <p>Hecho con ❤️ para cinéfilos</p>
-  <p><sub>Powered by Google Gemini AI</sub></p>
+  <p><sub>Idea Original de Domin - Powered by Google Gemini AI</sub></p>
 </div>

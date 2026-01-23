@@ -5,19 +5,20 @@ import ExploreView from './views/ExploreView';
 import MatchesView from './views/MatchesView';
 import ProfileView from './views/ProfileView';
 import LandingView from './views/LandingView';
+import AuthView from './views/AuthView';
+import ProfileSetupView from './views/ProfileSetupView';
 import DemoBanner from './components/DemoBanner';
 import PrivacyPolicyScreen from './views/PrivacyPolicyScreen';
 import { MessageSquare, X } from 'lucide-react';
 
 const App: React.FC = () => {
-  const { currentUser, isDemoMode, setDemoMode, login } = useAppContext();
+  const { currentUser, isDemoMode, setDemoMode, login, needsProfileSetup } = useAppContext();
   const [activeTab, setActiveTab] = useState<'explore' | 'matches' | 'profile'>('explore');
-  const [appState, setAppState] = useState<'landing' | 'privacy' | 'app'>('landing');
+  const [appState, setAppState] = useState<'landing' | 'privacy' | 'auth' | 'app'>('landing');
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackSent, setFeedbackSent] = useState(false);
   const [demoSwipes, setDemoSwipes] = useState(5);
 
-  // Sync internal landing state with global context
   useEffect(() => {
     if (currentUser) {
       setAppState('app');
@@ -45,7 +46,6 @@ const App: React.FC = () => {
     }
   };
 
-  // 1. Landing View
   if (appState === 'landing') {
     return (
       <LandingView 
@@ -53,30 +53,33 @@ const App: React.FC = () => {
           setDemoMode(true);
           setAppState('app');
         }}
-        onStartRegister={() => setAppState('privacy')}
+        onStartRegister={() => setAppState('auth')}
       />
     );
   }
 
-  // 2. Privacy Policy
+  if (appState === 'auth') {
+    return <AuthView onBack={() => setAppState('landing')} />;
+  }
+
+  if (needsProfileSetup) {
+    return <ProfileSetupView />;
+  }
+
   if (appState === 'privacy') {
     return (
       <PrivacyPolicyScreen 
-        onAccept={() => {
-          login(); // Trigger Google Login
-        }}
+        onAccept={() => login()}
         onDecline={() => setAppState('landing')}
       />
     );
   }
 
-  // 3. Main App View (Demo or Registered)
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Demo Banner */}
       {isDemoMode && (
         <DemoBanner 
-          onRegisterClick={() => setAppState('privacy')}
+          onRegisterClick={() => setAppState('auth')}
           swipesRemaining={demoSwipes}
         />
       )}
@@ -87,7 +90,6 @@ const App: React.FC = () => {
         </Layout>
       </div>
 
-      {/* Demo limit reached modal */}
       {isDemoMode && demoSwipes === 0 && (
         <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-6 backdrop-blur-sm">
           <div className="bg-neutral-900 rounded-3xl p-8 max-w-sm text-center border border-white/10 shadow-2xl">
@@ -97,7 +99,7 @@ const App: React.FC = () => {
               Has explorado los perfiles de ejemplo. Regístrate con Google para conocer personas reales que comparten tu pasión por el cine.
             </p>
             <button
-              onClick={() => setAppState('privacy')}
+              onClick={() => setAppState('auth')}
               className="w-full py-5 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-red-950/20 active:scale-95 transition-all"
             >
               Crear Cuenta Gratis
@@ -112,7 +114,6 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Canal de Feedback */}
       <div className="fixed bottom-24 right-4 z-[60]">
         {!showFeedback ? (
           <button 

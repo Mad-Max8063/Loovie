@@ -114,8 +114,8 @@ const IdentityVerification: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <ArrowLeft size={24} className="text-[#d4af37]" />
         </button>
         <div className="flex flex-col">
-          <h2 className="text-xl font-black uppercase tracking-tighter italic text-white leading-tight">Validación <span className="text-red-600">Búnker</span></h2>
-          <span className="text-[8px] text-[#d4af37] font-bold tracking-[0.4em] uppercase">Security Level High</span>
+          <h2 className="text-xl font-black uppercase tracking-tighter italic text-white leading-tight">{t('verification_title')}</h2>
+          <span className="text-[8px] text-[#d4af37] font-bold tracking-[0.4em] uppercase">{t('verification_subtitle')}</span>
         </div>
       </header>
 
@@ -139,8 +139,8 @@ const IdentityVerification: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <Camera size={40} className="text-neutral-700" />
                 </div>
                 <div className="space-y-3">
-                  <p className="text-xs font-black text-white uppercase tracking-widest leading-relaxed">Verificación Biométrica Requerida</p>
-                  <p className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest leading-relaxed px-4">Prepará tu mejor ángulo bajo buena luz para validar tu perfil.</p>
+                  <p className="text-xs font-black text-white uppercase tracking-widest leading-relaxed">{t('verification_required')}</p>
+                  <p className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest leading-relaxed px-4">{t('verification_desc')}</p>
                 </div>
               </div>
             )}
@@ -149,7 +149,7 @@ const IdentityVerification: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             {status === 'loading' && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-neutral-950 z-30">
                 <RefreshCw className="text-[#d4af37] animate-spin" size={32} />
-                <p className="text-[9px] font-black text-[#d4af37] uppercase tracking-[0.4em]">Iniciando Capturador...</p>
+                <p className="text-[9px] font-black text-[#d4af37] uppercase tracking-[0.4em]">{t('verification_loading_cam')}</p>
               </div>
             )}
             
@@ -170,7 +170,7 @@ const IdentityVerification: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <Lock className="absolute inset-0 m-auto text-white/40" size={24} />
                 </div>
                 <div className="text-center space-y-2 px-8">
-                  <p className="text-[11px] font-black text-white uppercase tracking-[0.4em]">Analizando Identidad</p>
+                  <p className="text-[11px] font-black text-white uppercase tracking-[0.4em]">{t('verification_analyzing')}</p>
                   <div className="h-1 w-32 bg-neutral-800 mx-auto rounded-full overflow-hidden">
                     <div className="h-full bg-red-600 animate-progress"></div>
                   </div>
@@ -185,7 +185,7 @@ const IdentityVerification: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <ShieldCheck className="text-white" size={60} />
                 </div>
                 <div className="text-center">
-                  <p className="text-sm font-black text-white uppercase tracking-[0.4em]">Acceso Concedido</p>
+                  <p className="text-sm font-black text-white uppercase tracking-[0.4em]">{t('verification_success_title')}</p>
                   <p className="text-[10px] text-white/70 font-bold uppercase mt-1 tracking-widest">Identidad Blindada</p>
                 </div>
               </div>
@@ -196,14 +196,14 @@ const IdentityVerification: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               <div className="absolute inset-0 bg-red-950/90 backdrop-blur-xl flex flex-col items-center justify-center gap-4 text-center p-8 z-40">
                 <AlertCircle className="text-red-500" size={48} />
                 <div className="space-y-2">
-                  <p className="text-[10px] font-black text-white uppercase tracking-widest">Error de Validación</p>
+                  <p className="text-[10px] font-black text-white uppercase tracking-widest">{t('verification_error_title')}</p>
                   <p className="text-[9px] text-red-400 font-bold uppercase leading-relaxed">{errorMessage}</p>
                 </div>
                 <button 
                   onClick={startCamera}
                   className="mt-4 px-6 py-2 bg-red-600 rounded-full text-[9px] font-black uppercase tracking-widest"
                 >
-                  Reintentar
+                  {t('verification_retry')}
                 </button>
               </div>
             )}
@@ -230,7 +230,7 @@ const IdentityVerification: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             onClick={startCamera}
             className="w-full py-5 bg-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-3"
           >
-            Abrir Obturador
+            {t('verification_open_cam')}
           </button>
         )}
         
@@ -240,13 +240,13 @@ const IdentityVerification: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               onClick={captureAndVerify}
               className="w-full py-5 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-2xl active:scale-[0.98] transition-all"
             >
-              Capturar y Validar
+              {t('verification_capture')}
             </button>
             <button 
               onClick={stopCamera}
               className="w-full py-3 text-neutral-500 font-black text-[9px] uppercase tracking-widest hover:text-white transition-colors"
             >
-              Cancelar
+              {t('verification_cancel')}
             </button>
           </div>
         )}

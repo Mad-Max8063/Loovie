@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAppContext } from '../context/AppContext';
 import { Shield, CheckCircle, Lock, Eye, MapPin, AlertCircle, FileText } from 'lucide-react';
 
 interface PrivacyPolicyScreenProps {
@@ -6,14 +7,14 @@ interface PrivacyPolicyScreenProps {
   onDecline: () => void;
 }
 
-const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onDecline }) => {
+const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onDecline }) => { const { t } = useAppContext();
   return (
     <div className="fixed inset-0 z-[150] bg-black flex flex-col font-sans">
       {/* Header con gradiente cinematográfico */}
       <div className="h-48 bg-gradient-to-b from-red-950/40 to-black flex flex-col items-center justify-center p-6 text-center border-b border-white/5">
         <Shield size={48} className="text-red-500 mb-2 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
-        <h1 className="text-2xl font-black text-white uppercase tracking-[0.2em]">Tu Seguridad</h1>
-        <p className="text-neutral-400 text-xs mt-1">El guion más importante de CineMatch es cuidarte.</p>
+        <h1 className="text-2xl font-black text-white uppercase tracking-[0.2em]">{t('privacy_title')}</h1>
+        <p className="text-neutral-400 text-xs mt-1">{t('privacy_subtitle')}</p>
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 py-8 pb-40">
@@ -99,13 +100,13 @@ const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onD
             className="w-full py-5 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-[0_10px_30px_rgba(220,38,38,0.3)]"
           >
             <CheckCircle size={18} />
-            Acepto y Continuar
+            {t('privacy_accept')}
           </button>
           <button
             onClick={onDecline}
             className="w-full py-2 text-neutral-600 font-black text-[9px] uppercase tracking-[0.2em] hover:text-neutral-400 transition-colors"
           >
-            No me convence
+            {t('privacy_decline')}
           </button>
         </div>
       </div>
