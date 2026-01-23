@@ -45,52 +45,55 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#020202] text-white flex justify-center md:items-center overflow-y-auto md:py-8">
-      <div className={`w-full max-w-md relative bg-black shadow-[0_0_100px_rgba(0,0,0,0.8)] md:rounded-[3rem] overflow-hidden flex flex-col h-screen md:h-[850px] md:max-h-[90dvh] border-x border-white/5 ${isDemoMode ? 'pt-10' : ''}`}>
-        {isDemoMode && (
-          <DemoBanner
-            onRegisterClick={() => setAppState('auth')}
-            swipesRemaining={swipesRemaining}
-          />
-        )}
-
-        <div className="flex-1 relative flex flex-col overflow-hidden">
-          {appState === 'landing' ? (
-            <LandingView
-              onStartDemo={() => {
-                setPrivacyIntent('demo');
-                setAppState('privacy');
-              }}
-              onStartRegister={() => {
-                setPrivacyIntent('auth');
-                setAppState('privacy');
-              }}
-              sponsor={activeSponsor}
+    <div className="min-h-screen w-full bg-[#050505] flex flex-col items-center overflow-y-auto font-sans relative">
+      {/* Safe Centering Wrapper for Desktop */}
+      <div className="flex-1 w-full flex flex-col items-center justify-center p-0 md:p-10 z-10">
+        <div className={`my-auto w-full max-w-md bg-black shadow-[0_0_100px_rgba(0,0,0,0.9)] md:rounded-[3.5rem] md:border-[8px] border-white/5 overflow-hidden flex flex-col relative aspect-[9/19.5] min-h-[650px] h-screen md:h-[850px] md:max-h-[95vh] ${isDemoMode ? 'pt-10' : ''}`}>
+          {isDemoMode && (
+            <DemoBanner
+              onRegisterClick={() => setAppState('auth')}
+              swipesRemaining={swipesRemaining}
             />
-          ) : appState === 'privacy' ? (
-            <PrivacyPolicyScreen
-              onAccept={() => {
-                if (privacyIntent === 'demo') {
-                  setDemoMode(true);
-                  setAppState('app');
-                } else {
-                  setAppState('auth');
-                }
-              }}
-              onDecline={() => {
-                setPrivacyIntent(null);
-                setAppState('landing');
-              }}
-            />
-          ) : appState === 'auth' ? (
-            <AuthView onBack={() => setAppState('landing')} />
-          ) : needsProfileSetup ? (
-            <ProfileSetupView />
-          ) : (
-            <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-              {renderView()}
-            </Layout>
           )}
+
+          <div className="flex-1 relative flex flex-col overflow-hidden">
+            {appState === 'landing' ? (
+              <LandingView
+                onStartDemo={() => {
+                  setPrivacyIntent('demo');
+                  setAppState('privacy');
+                }}
+                onStartRegister={() => {
+                  setPrivacyIntent('auth');
+                  setAppState('privacy');
+                }}
+                sponsor={activeSponsor}
+              />
+            ) : appState === 'privacy' ? (
+              <PrivacyPolicyScreen
+                onAccept={() => {
+                  if (privacyIntent === 'demo') {
+                    setDemoMode(true);
+                    setAppState('app');
+                  } else {
+                    setAppState('auth');
+                  }
+                }}
+                onDecline={() => {
+                  setPrivacyIntent(null);
+                  setAppState('landing');
+                }}
+              />
+            ) : appState === 'auth' ? (
+              <AuthView onBack={() => setAppState('landing')} />
+            ) : needsProfileSetup ? (
+              <ProfileSetupView />
+            ) : (
+              <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
+                {renderView()}
+              </Layout>
+            )}
+          </div>
         </div>
       </div>
 
@@ -125,54 +128,53 @@ const App: React.FC = () => {
         </div>
       )}
 
-      <div className="fixed bottom-24 right-4 z-[60] max-w-md w-full pointer-events-none flex justify-end px-4">
-        <div className="pointer-events-auto">
-          {!showFeedback ? (
-            <button
-              onClick={() => setShowFeedback(true)}
-              className="w-14 h-14 bg-[#d4af37] text-black rounded-full shadow-2xl flex items-center justify-center animate-bounce hover:scale-110 transition-transform active:scale-95 shadow-[#d4af37]/20"
-            >
-              <MessageSquare size={24} />
-            </button>
-          ) : (
-            <div className="bg-neutral-900 border border-[#d4af37]/30 rounded-3xl p-6 shadow-[0_30px_60px_rgba(0,0,0,0.9)] w-80 transform transition-all animate-in fade-in slide-in-from-bottom-4">
-              <div className="flex justify-between items-center mb-5">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse"></div>
-                  <h4 className="text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em]">Crítica de Loovie</h4>
-                </div>
-                <button onClick={() => { setShowFeedback(false); setFeedbackSent(false); }} className="text-neutral-600 hover:text-white transition-colors">
-                  <X size={20} />
+      {/* Floating feedback button hidden on small screens */}
+      <div className="fixed bottom-8 right-8 z-[60] hidden md:block">
+        {!showFeedback ? (
+          <button
+            onClick={() => setShowFeedback(true)}
+            className="w-14 h-14 bg-[#d4af37] text-black rounded-full shadow-2xl flex items-center justify-center animate-bounce hover:scale-110 transition-transform active:scale-95 shadow-[#d4af37]/20 border-4 border-black"
+          >
+            <MessageSquare size={24} />
+          </button>
+        ) : (
+          <div className="bg-neutral-900 border border-[#d4af37]/30 rounded-3xl p-6 shadow-[0_30px_60px_rgba(0,0,0,0.9)] w-80 transform transition-all animate-in fade-in slide-in-from-bottom-4">
+            <div className="flex justify-between items-center mb-5">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse"></div>
+                <h4 className="text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em]">Crítica de Loovie</h4>
+              </div>
+              <button onClick={() => { setShowFeedback(false); setFeedbackSent(false); }} className="text-neutral-600 hover:text-white transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+
+            {!feedbackSent ? (
+              <div className="space-y-4">
+                <p className="text-xs text-neutral-200 font-black leading-relaxed">¿Qué te parece la experiencia CineMatch hasta ahora?</p>
+                <textarea
+                  className="w-full bg-black border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-[#d4af37]/40 transition-colors"
+                  placeholder="Tu opinión nos ayuda a lanzar la app..."
+                  rows={4}
+                />
+                <button
+                  onClick={() => setFeedbackSent(true)}
+                  className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-950/20 active:scale-95 transition-all"
+                >
+                  ENVIAR FEEDBACK
                 </button>
               </div>
-
-              {!feedbackSent ? (
-                <div className="space-y-4">
-                  <p className="text-xs text-neutral-200 font-black leading-relaxed">¿Qué te parece la experiencia CineMatch hasta ahora?</p>
-                  <textarea
-                    className="w-full bg-black border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-[#d4af37]/40 transition-colors"
-                    placeholder="Tu opinión nos ayuda a lanzar la app..."
-                    rows={4}
-                  />
-                  <button
-                    onClick={() => setFeedbackSent(true)}
-                    className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-950/20 active:scale-95 transition-all"
-                  >
-                    ENVIAR FEEDBACK
-                  </button>
+            ) : (
+              <div className="text-center py-6 space-y-3">
+                <div className="w-14 h-14 bg-green-950/30 text-green-500 rounded-full flex items-center justify-center mx-auto border border-green-500/20">
+                  <MessageSquare size={28} />
                 </div>
-              ) : (
-                <div className="text-center py-6 space-y-3">
-                  <div className="w-14 h-14 bg-green-950/30 text-green-500 rounded-full flex items-center justify-center mx-auto border border-green-500/20">
-                    <MessageSquare size={28} />
-                  </div>
-                  <p className="text-[11px] font-black text-white uppercase tracking-widest pt-2">¡Oído en la sala!</p>
-                  <p className="text-[9px] text-neutral-500 font-bold italic leading-relaxed px-4">Gracias. Tu crítica nos sirve para pulir los detalles finales del estreno.</p>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+                <p className="text-[11px] font-black text-white uppercase tracking-widest pt-2">¡Oído en la sala!</p>
+                <p className="text-[9px] text-neutral-500 font-bold italic leading-relaxed px-4">Gracias. Tu crítica nos sirve para pulir los detalles finales del estreno.</p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
