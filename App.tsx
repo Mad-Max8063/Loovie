@@ -31,9 +31,22 @@ const App: React.FC = () => {
     }
   }, [currentUser]);
 
+  const renderView = () => {
+    switch (activeTab) {
+      case 'explore':
+        return <ExploreView onSwipe={decrementSwipes} swipesRemaining={swipesRemaining} />;
+      case 'matches':
+        return <MatchesView />;
+      case 'profile':
+        return <ProfileView />;
+      default:
+        return <ExploreView onSwipe={decrementSwipes} swipesRemaining={swipesRemaining} />;
+    }
+  };
+
   return (
-    <div className="h-screen w-screen bg-[#020202] text-white flex items-center justify-center overflow-hidden font-sans">
-      <div className={`w-full max-w-md h-full relative flex flex-col bg-black shadow-[0_0_80px_rgba(0,0,0,1)] border-x border-white/5 overflow-hidden ${isDemoMode ? 'pt-10' : ''}`}>
+    <div className="min-h-screen w-full bg-[#020202] text-white flex justify-center md:items-center overflow-y-auto md:py-8">
+      <div className={`w-full max-w-md relative bg-black shadow-[0_0_100px_rgba(0,0,0,0.8)] md:rounded-[3rem] overflow-hidden flex flex-col h-screen md:h-[850px] md:max-h-[90dvh] border-x border-white/5 ${isDemoMode ? 'pt-10' : ''}`}>
         {isDemoMode && (
           <DemoBanner
             onRegisterClick={() => setAppState('auth')}
@@ -41,42 +54,44 @@ const App: React.FC = () => {
           />
         )}
 
-        {appState === 'landing' ? (
-          <LandingView
-            onStartDemo={() => {
-              setPrivacyIntent('demo');
-              setAppState('privacy');
-            }}
-            onStartRegister={() => {
-              setPrivacyIntent('auth');
-              setAppState('privacy');
-            }}
-            sponsor={activeSponsor}
-          />
-        ) : appState === 'privacy' ? (
-          <PrivacyPolicyScreen
-            onAccept={() => {
-              if (privacyIntent === 'demo') {
-                setDemoMode(true);
-                setAppState('app');
-              } else {
-                setAppState('auth');
-              }
-            }}
-            onDecline={() => {
-              setPrivacyIntent(null);
-              setAppState('landing');
-            }}
-          />
-        ) : appState === 'auth' ? (
-          <AuthView onBack={() => setAppState('landing')} />
-        ) : needsProfileSetup ? (
-          <ProfileSetupView />
-        ) : (
-          <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-            {renderView()}
-          </Layout>
-        )}
+        <div className="flex-1 relative flex flex-col overflow-hidden">
+          {appState === 'landing' ? (
+            <LandingView
+              onStartDemo={() => {
+                setPrivacyIntent('demo');
+                setAppState('privacy');
+              }}
+              onStartRegister={() => {
+                setPrivacyIntent('auth');
+                setAppState('privacy');
+              }}
+              sponsor={activeSponsor}
+            />
+          ) : appState === 'privacy' ? (
+            <PrivacyPolicyScreen
+              onAccept={() => {
+                if (privacyIntent === 'demo') {
+                  setDemoMode(true);
+                  setAppState('app');
+                } else {
+                  setAppState('auth');
+                }
+              }}
+              onDecline={() => {
+                setPrivacyIntent(null);
+                setAppState('landing');
+              }}
+            />
+          ) : appState === 'auth' ? (
+            <AuthView onBack={() => setAppState('landing')} />
+          ) : needsProfileSetup ? (
+            <ProfileSetupView />
+          ) : (
+            <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
+              {renderView()}
+            </Layout>
+          )}
+        </div>
       </div>
 
       {(isDemoMode || !isPremium) && swipesRemaining === 0 && (

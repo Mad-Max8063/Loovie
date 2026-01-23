@@ -13,7 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
   const { t } = useAppContext();
 
   return (
-    <div className="flex flex-col h-screen w-full max-w-md mx-auto relative bg-[#050505] shadow-2xl overflow-hidden border-x border-white/5">
+    <div className="flex flex-col h-full w-full max-w-md mx-auto relative bg-[#050505] shadow-2xl overflow-hidden border-x border-white/5">
       <header className="p-4 flex items-center justify-between border-b border-[#d4af37]/30 bg-black/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-2">
           <Clapperboard className="text-red-600 w-6 h-6" />
