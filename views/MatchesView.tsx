@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { MOCK_USERS } from '../constants';
-import { Search, Send, ArrowLeft, Popcorn, Ticket } from 'lucide-react';
+import { Search, Send, ArrowLeft, Popcorn, Ticket, MoreVertical, AlertTriangle, ShieldCheck, CheckCircle2, Lock, Shield } from 'lucide-react';
 import { getIcebreaker, getCollaborativeRecommendation } from '../services/geminiService';
+import PaywallModal from '../components/PaywallModal';
+import SafetyTipsModal from '../components/SafetyTipsModal';
 
 const MatchesView: React.FC = () => {
-    const { matches, currentUser, messages, sendMessage, t, language, setActiveChatId, potentials } = useAppContext();
+    const { matches, currentUser, messages, sendMessage, t, language, setActiveChatId, potentials, isPremium } = useAppContext();
     const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
     const [inputText, setInputText] = useState('');
     const [isGeneratingIcebreaker, setIsGeneratingIcebreaker] = useState(false);
     const [isGeneratingRec, setIsGeneratingRec] = useState(false);
+    const [showSafetyMenu, setShowSafetyMenu] = useState(false);
+    const [safetyToast, setSafetyToast] = useState<string | null>(null);
+    const [showPaywall, setShowPaywall] = useState(false);
+    const [showSafetyTips, setShowSafetyTips] = useState(false);
 
     const handleSelectChat = (id: string | null) => {
         setSelectedMatchId(id);
@@ -57,11 +63,59 @@ const MatchesView: React.FC = () => {
                     <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-red-600 shadow-lg shadow-red-900/20">
                         <img src={matchedUser.photoUrl} alt="" className="w-full h-full object-cover" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                         <h3 className="font-bold text-sm text-white">{matchedUser.displayName}</h3>
                         <span className="text-[9px] text-green-500 uppercase font-black tracking-widest">{t('chat_online')}</span>
                     </div>
+
+                    <div className="relative">
+                        <button
+                            onClick={() => setShowSafetyMenu(!showSafetyMenu)}
+                            className="p-2 hover:bg-neutral-800 rounded-full transition-colors text-neutral-500"
+                        >
+                            <MoreVertical size={20} />
+                        </button>
+
+                        {showSafetyMenu && (
+                            <div className="absolute right-0 top-full mt-2 w-48 bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden shadow-2xl z-50 animate-in slide-in-from-top-2 duration-200">
+                                <button
+                                    onClick={() => {
+                                        setSafetyToast(t('safety_report_success'));
+                                        setShowSafetyMenu(false);
+                                        setTimeout(() => setSafetyToast(null), 3000);
+                                    }}
+                                    className="w-full px-4 py-3 flex items-center gap-3 text-[10px] font-black uppercase text-white hover:bg-red-600/10 transition-colors"
+                                >
+                                    <AlertTriangle size={14} className="text-red-500" />
+                                    {t('safety_report')}
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSafetyToast(t('safety_block_success'));
+                                        setShowSafetyMenu(false);
+                                        setTimeout(() => {
+                                            setSafetyToast(null);
+                                            handleSelectChat(null); // Salir del chat al bloquear
+                                        }, 2500);
+                                    }}
+                                    className="w-full px-4 py-3 flex items-center gap-3 text-[10px] font-black uppercase text-red-500 hover:bg-red-600/20 transition-colors border-t border-white/5"
+                                >
+                                    <ShieldCheck size={14} />
+                                    {t('safety_block')}
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
+
+                {safetyToast && (
+                    <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[200] bg-neutral-900 border border-[#d4af37]/30 px-6 py-3 rounded-2xl shadow-2xl animate-in slide-in-from-top-4">
+                        <div className="flex items-center gap-3">
+                            <CheckCircle2 size={18} className="text-green-500" />
+                            <span className="text-[10px] font-black text-white uppercase tracking-widest">{safetyToast}</span>
+                        </div>
+                    </div>
+                )}
 
                 <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')]">
                     <div className="text-center py-4">
@@ -80,8 +134,8 @@ const MatchesView: React.FC = () => {
                     {matchMessages.map(msg => (
                         <div key={msg.id} className={`flex ${msg.senderId === currentUser?.id ? 'justify-end' : 'justify-start'}`}>
                             <div className={`max-w-[85%] px-5 py-3 rounded-2xl text-sm shadow-sm ${msg.senderId === currentUser?.id
-                                    ? 'bg-red-700 text-white rounded-tr-none'
-                                    : 'bg-neutral-900 text-neutral-100 rounded-tl-none border border-white/5'
+                                ? 'bg-red-700 text-white rounded-tr-none'
+                                : 'bg-neutral-900 text-neutral-100 rounded-tl-none border border-white/5'
                                 }`}>
                                 {msg.text}
                             </div>
@@ -105,7 +159,7 @@ const MatchesView: React.FC = () => {
                             className="px-4 py-1.5 bg-red-600/10 border border-red-600/30 rounded-full text-[10px] font-black text-red-500 flex items-center gap-2 hover:bg-red-600/20 transition-all disabled:opacity-50"
                         >
                             <Popcorn size={14} />
-                            {isGeneratingRec ? '...' : (t('explore_action'))}
+                            {isGeneratingRec ? t('chat_movie_recs_loading') : (t('explore_action'))}
                         </button>
                     </div>
                     <div className="flex gap-3 items-center bg-neutral-950 rounded-2xl px-5 py-3 border border-white/10">
@@ -127,13 +181,58 @@ const MatchesView: React.FC = () => {
     }
 
     return (
-        <div className="p-4 flex flex-col h-full gap-4">
+        <div className="p-4 flex flex-col h-full gap-6">
+            <div className="flex items-center justify-between px-2">
+                <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">{t('nav_matches')}</h1>
+                <button
+                    onClick={() => setShowSafetyTips(true)}
+                    className="p-3 bg-blue-600/10 border border-blue-600/30 rounded-2xl text-blue-500 hover:bg-blue-600 hover:text-white transition-all active:scale-95"
+                    title={t('safety_tips_title')}
+                >
+                    <Shield size={20} />
+                </button>
+            </div>
+
             <div className="flex items-center gap-3 bg-neutral-900/50 rounded-2xl px-5 py-3 border border-white/5">
                 <Search size={18} className="text-neutral-500" />
                 <input type="text" placeholder={t('matches_search')} className="bg-transparent border-none outline-none text-sm text-white w-full" />
             </div>
 
             <div className="flex-1 overflow-y-auto">
+                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d4af37] mb-4 px-2">{t('likes_received')}</h2>
+                <div className="flex gap-4 overflow-x-auto pb-6 no-scrollbar">
+                    {/* Simulamos que le gustan 3 personas de los potenciales que no son matches */}
+                    {potentials.slice(0, 3).map(user => (
+                        <button
+                            key={user.id}
+                            onClick={() => !isPremium && setShowPaywall(true)}
+                            className="flex-shrink-0 relative group"
+                        >
+                            <div className={`w-20 h-28 rounded-2xl overflow-hidden border border-white/10 transition-all ${!isPremium ? 'blur-md' : ''}`}>
+                                <img src={user.photoUrl} alt="" className="w-full h-full object-cover" />
+                            </div>
+                            {!isPremium && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-2xl">
+                                    <Lock size={20} className="text-white/80" />
+                                </div>
+                            )}
+                            <div className="absolute -bottom-1 -right-1 bg-red-600 rounded-full p-1.5 shadow-lg border-2 border-black">
+                                <Ticket size={10} className="text-white fill-white" />
+                            </div>
+                        </button>
+                    ))}
+                    {!isPremium && (
+                        <button
+                            onClick={() => setShowPaywall(true)}
+                            className="flex-shrink-0 w-20 h-28 rounded-2xl border border-dashed border-white/20 bg-white/5 flex flex-col items-center justify-center gap-2"
+                        >
+                            <span className="text-[10px] font-black text-[#d4af37] text-center px-2 leading-tight">
+                                {t('likes_blur_text').split(' ').slice(0, 2).join(' ')}...
+                            </span>
+                        </button>
+                    )}
+                </div>
+
                 <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 px-2">{t('matches_new')}</h2>
                 <div className="flex gap-5 overflow-x-auto pb-6 no-scrollbar">
                     {matches.filter(m => !m.lastMessage).map(m => {
@@ -187,6 +286,8 @@ const MatchesView: React.FC = () => {
                     })}
                 </div>
             </div>
+            <PaywallModal isOpen={showPaywall} onClose={() => setShowPaywall(false)} />
+            <SafetyTipsModal isOpen={showSafetyTips} onClose={() => setShowSafetyTips(false)} />
         </div>
     );
 };

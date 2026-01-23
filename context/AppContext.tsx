@@ -6,6 +6,7 @@ import { shouldMatch } from '../services/matchingService';
 import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '../services/firebase';
 import * as dbService from '../services/dbService';
 import * as chatService from '../services/chatService';
+
 interface AppContextType {
   currentUser: UserProfile | null;
   potentials: UserProfile[];
@@ -26,6 +27,14 @@ interface AppContextType {
   setDemoMode: (val: boolean) => void;
   needsProfileSetup: boolean;
   setActiveChatId: (id: string | null) => void;
+  refreshProfile: () => Promise<void>;
+  isPremium: boolean;
+  setIsPremium: (val: boolean) => void;
+  swipesRemaining: number;
+  decrementSwipes: () => void;
+  activeSponsor: { name: string, logo?: string } | null;
+  handleApplyPromo: (months: number) => void;
+  initiatePayment: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -41,6 +50,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isUserVerified, setIsUserVerified] = useState(false);
   const [isDemoMode, setIsDemoMode] = useState(false);
   const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
+
+  const [isPremium, setIsPremium] = useState(false);
+  const [swipesRemaining, setSwipesRemaining] = useState(10);
+  const [activeSponsor, setActiveSponsor] = useState<{ name: string, logo?: string } | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -87,7 +100,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     fetchPotentials();
   }, [currentUser, isDemoMode]);
 
-  
+  useEffect(() => {
+    setActiveSponsor({ name: 'Movistar Cine' });
+  }, []);
+
+  const refreshProfile = async () => {
+    if (currentUser?.id) {
+      const profile = await dbService.getUser(currentUser.id);
+      if (profile) setCurrentUser(profile);
+    }
+  };
 
   const login = async (method: 'google' | 'email' = 'google', email?: string, password?: string, isSignup?: boolean) => {
     try {
@@ -129,8 +151,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         intentMode: IntentMode.DEEP_TALK
       });
       setPotentials(MOCK_USERS);
+      setSwipesRemaining(10);
     }
   };
+
+  const handleApplyPromo = (months: number) => {
+    setIsPremium(true);
+    setSwipesRemaining(999);
+  };
+
+  const initiatePayment = () => {
+    const PAYMENT_URL = "https://mpago.la/example-loovie-premium";
+    window.open(PAYMENT_URL, '_blank');
+  };
+
+  const decrementSwipes = useCallback(() => {
+    if (swipesRemaining > 0 && !isPremium) {
+      setSwipesRemaining(prev => prev - 1);
+    }
+  }, [swipesRemaining, isPremium]);
 
   const t = (key: keyof typeof translations['es-AR']): string => {
     return translations[language][key] || translations['es-AR'][key];
@@ -154,7 +193,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const matchedUser = MOCK_USERS.find(u => u.id === id);
       if (matchedUser && shouldMatch(currentUser, matchedUser)) {
         setMatches(prev => [...prev, {
-          id: `m-${Date.now()}-${id}`, 
+          id: `m-${Date.now()}-${id}`,
           users: [currentUser.id, id],
           timestamp: Date.now()
         }]);
@@ -167,7 +206,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (!currentUser) return;
     if (isDemoMode) {
       const newMessage: Message = {
-        id: `msg-${Date.now()}`, 
+        id: `msg-${Date.now()}`,
         matchId,
         senderId: currentUser.id,
         text,
@@ -181,11 +220,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [currentUser, isDemoMode]);
 
   return (
-    <AppContext.Provider value={{ 
-      currentUser, potentials, likes, matches, messages, 
+    <AppContext.Provider value={{
+      currentUser, potentials, likes, matches, messages,
       language, t, setLanguage, isUserVerified, setUserVerified,
-      addLike, removePotential, sendMessage, login, logout, 
-      isDemoMode, setDemoMode, needsProfileSetup, setActiveChatId
+      addLike, removePotential, sendMessage, login, logout,
+      isDemoMode, setDemoMode, needsProfileSetup, setActiveChatId,
+      refreshProfile, isPremium, setIsPremium, swipesRemaining,
+      decrementSwipes, activeSponsor, handleApplyPromo, initiatePayment
     }}>
       {children}
     </AppContext.Provider>

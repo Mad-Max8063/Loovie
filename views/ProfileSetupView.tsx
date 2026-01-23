@@ -4,11 +4,12 @@ import { User, Calendar, FileText, Film, Check } from 'lucide-react';
 import * as dbService from '../services/dbService';
 
 const ProfileSetupView: React.FC = () => {
-    const { t, currentUser } = useAppContext();
+    const { t, currentUser, refreshProfile } = useAppContext();
     const [age, setAge] = useState('');
     const [bio, setBio] = useState('');
     const [genres, setGenres] = useState<string[]>([]);
-    
+    const [isSaving, setIsSaving] = useState(false);
+
     const availableGenres = ['genre_action', 'genre_comedy', 'genre_drama', 'genre_horror', 'genre_sci_fi', 'genre_documentary', 'genre_indie'];
 
     const handleToggleGenre = (g: string) => {
@@ -16,15 +17,22 @@ const ProfileSetupView: React.FC = () => {
     };
 
     const handleSave = async () => {
-        if (!currentUser) return;
-        const updatedProfile = {
-            ...currentUser,
-            age: parseInt(age),
-            bio,
-            favoriteGenres: genres
-        };
-        await dbService.saveUser(updatedProfile);
-        window.location.reload(); 
+        if (!currentUser || isSaving) return;
+        setIsSaving(true);
+        try {
+            const updatedProfile = {
+                ...currentUser,
+                age: parseInt(age),
+                bio,
+                favoriteGenres: genres
+            };
+            await dbService.saveUser(updatedProfile);
+            await refreshProfile();
+        } catch (error) {
+            console.error("Save error:", error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
@@ -40,11 +48,11 @@ const ProfileSetupView: React.FC = () => {
                         <label className="text-[10px] font-black text-neutral-500 uppercase tracking-widest flex items-center gap-2">
                             <Calendar size={14} /> {t('profile_setup_age')}
                         </label>
-                        <input 
-                            type="number" 
+                        <input
+                            type="number"
                             value={age}
                             onChange={(e) => setAge(e.target.value)}
-                            className="w-full bg-neutral-900 border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-red-600/50" 
+                            className="w-full bg-neutral-900 border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-red-600/50"
                         />
                     </div>
 
@@ -52,10 +60,10 @@ const ProfileSetupView: React.FC = () => {
                         <label className="text-[10px] font-black text-neutral-500 uppercase tracking-widest flex items-center gap-2">
                             <FileText size={14} /> {t('profile_setup_bio')}
                         </label>
-                        <textarea 
+                        <textarea
                             value={bio}
                             onChange={(e) => setBio(e.target.value)}
-                            className="w-full bg-neutral-900 border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-red-600/50" 
+                            className="w-full bg-neutral-900 border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-red-600/50"
                             rows={3}
                         />
                     </div>
@@ -66,12 +74,11 @@ const ProfileSetupView: React.FC = () => {
                         </label>
                         <div className="flex flex-wrap gap-2">
                             {availableGenres.map(g => (
-                                <button 
+                                <button
                                     key={t(g as any)}
                                     onClick={() => handleToggleGenre(g)}
-                                    className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${
-                                        genres.includes(g) ? 'bg-red-600 text-white' : 'bg-neutral-900 text-neutral-500 border border-white/5'
-                                    }`}
+                                    className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${genres.includes(g) ? 'bg-red-600 text-white' : 'bg-neutral-900 text-neutral-500 border border-white/5'
+                                        }`}
                                 >
                                     {t(g as any)}
                                 </button>
@@ -80,11 +87,14 @@ const ProfileSetupView: React.FC = () => {
                     </div>
                 </div>
 
-                <button 
+                <button
                     onClick={handleSave}
-                    className="w-full py-5 bg-[#d4af37] text-black rounded-3xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all"
+                    disabled={isSaving || !age || !bio || genres.length === 0}
+                    className={`w-full py-5 rounded-3xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all
+                        ${(isSaving || !age || !bio || genres.length === 0) ? 'bg-neutral-800 text-neutral-600 cursor-not-allowed' : 'bg-[#d4af37] text-black'}
+                    `}
                 >
-                    {t('profile_setup_save')}
+                    {isSaving ? '...' : t('profile_setup_save')}
                 </button>
             </div>
         </div>

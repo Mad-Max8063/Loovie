@@ -9,15 +9,19 @@ import AuthView from './views/AuthView';
 import ProfileSetupView from './views/ProfileSetupView';
 import DemoBanner from './components/DemoBanner';
 import PrivacyPolicyScreen from './views/PrivacyPolicyScreen';
+import PromoCodeSection from './components/PromoCodeSection';
 import { MessageSquare, X } from 'lucide-react';
 
 const App: React.FC = () => {
-  const { currentUser, isDemoMode, setDemoMode, login, needsProfileSetup } = useAppContext();
+  const {
+    currentUser, isDemoMode, setDemoMode, login, needsProfileSetup,
+    isPremium, swipesRemaining, decrementSwipes, activeSponsor, handleApplyPromo
+  } = useAppContext();
   const [activeTab, setActiveTab] = useState<'explore' | 'matches' | 'profile'>('explore');
   const [appState, setAppState] = useState<'landing' | 'privacy' | 'auth' | 'app'>('landing');
+  const [privacyIntent, setPrivacyIntent] = useState<'demo' | 'auth' | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackSent, setFeedbackSent] = useState(false);
-  const [demoSwipes, setDemoSwipes] = useState(5);
 
   useEffect(() => {
     if (currentUser) {
@@ -27,16 +31,10 @@ const App: React.FC = () => {
     }
   }, [currentUser]);
 
-  const handleDemoSwipe = () => {
-    if (isDemoMode && demoSwipes > 0) {
-      setDemoSwipes(prev => prev - 1);
-    }
-  };
-
   const renderView = () => {
     switch (activeTab) {
       case 'explore':
-        return <ExploreView onSwipe={handleDemoSwipe} swipesRemaining={isDemoMode ? demoSwipes : undefined} />;
+        return <ExploreView onSwipe={decrementSwipes} swipesRemaining={swipesRemaining} />;
       case 'matches':
         return <MatchesView />;
       case 'profile':
@@ -48,12 +46,35 @@ const App: React.FC = () => {
 
   if (appState === 'landing') {
     return (
-      <LandingView 
+      <LandingView
         onStartDemo={() => {
-          setDemoMode(true);
-          setAppState('app');
+          setPrivacyIntent('demo');
+          setAppState('privacy');
         }}
-        onStartRegister={() => setAppState('auth')}
+        onStartRegister={() => {
+          setPrivacyIntent('auth');
+          setAppState('privacy');
+        }}
+        sponsor={activeSponsor}
+      />
+    );
+  }
+
+  if (appState === 'privacy') {
+    return (
+      <PrivacyPolicyScreen
+        onAccept={() => {
+          if (privacyIntent === 'demo') {
+            setDemoMode(true);
+            setAppState('app');
+          } else {
+            setAppState('auth');
+          }
+        }}
+        onDecline={() => {
+          setPrivacyIntent(null);
+          setAppState('landing');
+        }}
       />
     );
   }
@@ -66,21 +87,12 @@ const App: React.FC = () => {
     return <ProfileSetupView />;
   }
 
-  if (appState === 'privacy') {
-    return (
-      <PrivacyPolicyScreen 
-        onAccept={() => login()}
-        onDecline={() => setAppState('landing')}
-      />
-    );
-  }
-
   return (
     <div className="min-h-screen bg-black text-white">
       {isDemoMode && (
-        <DemoBanner 
+        <DemoBanner
           onRegisterClick={() => setAppState('auth')}
-          swipesRemaining={demoSwipes}
+          swipesRemaining={swipesRemaining}
         />
       )}
 
@@ -90,22 +102,29 @@ const App: React.FC = () => {
         </Layout>
       </div>
 
-      {isDemoMode && demoSwipes === 0 && (
+      {(isDemoMode || !isPremium) && swipesRemaining === 0 && (
         <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-6 backdrop-blur-sm">
           <div className="bg-neutral-900 rounded-3xl p-8 max-w-sm text-center border border-white/10 shadow-2xl">
             <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">🎬</div>
-            <h2 className="text-xl font-black text-white uppercase tracking-wider mb-2">¡Demo Completada!</h2>
+            <h2 className="text-xl font-black text-white uppercase tracking-wider mb-2">¡Límite Alcanzado!</h2>
             <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
-              Has explorado los perfiles de ejemplo. Regístrate con Google para conocer personas reales que comparten tu pasión por el cine.
+              Has agotado tus swipes por hoy. {isDemoMode ? 'Regístrate' : 'Pásate a Premium'} para seguir conociendo cinéfilos sin límites.
             </p>
             <button
-              onClick={() => setAppState('auth')}
+              onClick={() => isDemoMode ? setAppState('auth') : console.log("Go to checkout")}
               className="w-full py-5 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-red-950/20 active:scale-95 transition-all"
             >
-              Crear Cuenta Gratis
+              {isDemoMode ? 'Crear Cuenta Gratis' : 'Ver Planes Premium'}
             </button>
+            <div className="mt-6 border-t border-white/5 pt-6">
+              <PromoCodeSection
+                onApplyPromo={handleApplyPromo}
+                brandName={activeSponsor?.name}
+              />
+            </div>
+
             <button
-              onClick={() => { setDemoSwipes(5); }}
+              onClick={() => setDemoMode(true)}
               className="w-full py-3 mt-3 text-neutral-500 text-[10px] font-black uppercase tracking-[0.2em] hover:text-neutral-300 transition-colors"
             >
               Reiniciar Demo
@@ -116,7 +135,7 @@ const App: React.FC = () => {
 
       <div className="fixed bottom-24 right-4 z-[60]">
         {!showFeedback ? (
-          <button 
+          <button
             onClick={() => setShowFeedback(true)}
             className="w-14 h-14 bg-[#d4af37] text-black rounded-full shadow-2xl flex items-center justify-center animate-bounce hover:scale-110 transition-transform active:scale-95 shadow-[#d4af37]/20"
           >
@@ -127,22 +146,22 @@ const App: React.FC = () => {
             <div className="flex justify-between items-center mb-5">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse"></div>
-                <h4 className="text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em]">Crítica de la App</h4>
+                <h4 className="text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em]">Crítica de Loovie</h4>
               </div>
               <button onClick={() => { setShowFeedback(false); setFeedbackSent(false); }} className="text-neutral-600 hover:text-white transition-colors">
                 <X size={20} />
               </button>
             </div>
-            
+
             {!feedbackSent ? (
               <div className="space-y-4">
                 <p className="text-xs text-neutral-200 font-black leading-relaxed">¿Qué te parece la experiencia CineMatch hasta ahora?</p>
-                <textarea 
+                <textarea
                   className="w-full bg-black border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-[#d4af37]/40 transition-colors"
                   placeholder="Tu opinión nos ayuda a lanzar la app..."
                   rows={4}
                 />
-                <button 
+                <button
                   onClick={() => setFeedbackSent(true)}
                   className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-950/20 active:scale-95 transition-all"
                 >

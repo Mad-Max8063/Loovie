@@ -7,25 +7,26 @@ interface PrivacyPolicyScreenProps {
   onDecline: () => void;
 }
 
-const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onDecline }) => { const { t } = useAppContext();
+const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onDecline }) => {
+  const { t } = useAppContext();
   return (
     <div className="fixed inset-0 z-[150] bg-black flex flex-col font-sans">
       {/* Header con gradiente cinematográfico */}
       <div className="h-48 bg-gradient-to-b from-red-950/40 to-black flex flex-col items-center justify-center p-6 text-center border-b border-white/5">
         <Shield size={48} className="text-red-500 mb-2 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
-        <h1 className="text-2xl font-black text-white uppercase tracking-[0.2em]">{t('privacy_title')}</h1>
+        <h1 className="text-2xl font-black text-white uppercase tracking-[0.2em]">LOOVIE</h1>
         <p className="text-neutral-400 text-xs mt-1">{t('privacy_subtitle')}</p>
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 py-8 pb-40">
         <div className="max-w-md mx-auto space-y-10">
-          
+
           {/* Sección Amigable: Resumen Transparente */}
           <section className="space-y-6">
             <h2 className="text-[10px] font-black text-red-500 uppercase tracking-[0.3em] flex items-center gap-2">
               <SparkleIcon /> En criollo: ¿Cómo te cuidamos?
             </h2>
-            
+
             <div className="grid grid-cols-1 gap-4">
               <div className="bg-neutral-900/40 rounded-2xl p-4 border border-white/5 flex gap-4">
                 <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center flex-shrink-0">
@@ -53,7 +54,7 @@ const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onD
                 </div>
                 <div>
                   <h3 className="text-xs font-bold text-white mb-1">Chau a los mala onda</h3>
-                  <p className="text-[10px] text-neutral-500 leading-relaxed">Si alguien te molesta, lo bloqueás y listo. El equipo de CineMatch revisa cada reporte al toque.</p>
+                  <p className="text-[10px] text-neutral-500 leading-relaxed">Si alguien te molesta, lo bloqueás y listo. El equipo de Loovie revisa cada reporte al toque.</p>
                 </div>
               </div>
             </div>
@@ -67,7 +68,7 @@ const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onD
             <div className="bg-neutral-900 rounded-xl p-4 border border-white/10 h-48 overflow-y-auto text-[9px] text-neutral-400 leading-loose scrollbar-hide">
               <p className="mb-3 font-bold text-neutral-300">1. PROTECCIÓN DE DATOS (ARGENTINA)</p>
               <p className="mb-3">
-                CineMatch cumple estrictamente con la Ley N° 25.326 de Protección de Datos Personales en la República Argentina. Tus datos personales se almacenan en una base de datos segura con el único fin de proveer el servicio de conexión entre usuarios.
+                Loovie cumple estrictamente con la Ley N° 25.326 de Protección de Datos Personales en la República Argentina. Tus datos personales se almacenan en una base de datos segura con el único fin de proveer el servicio de conexión entre usuarios.
               </p>
               <p className="mb-3 font-bold text-neutral-300">2. DATOS BIOMÉTRICOS E IA</p>
               <p className="mb-3">
@@ -75,7 +76,7 @@ const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onD
               </p>
               <p className="mb-3 font-bold text-neutral-300">3. DERECHOS ARCO</p>
               <p className="mb-3">
-                El titular de los datos personales tiene la facultad de ejercer el derecho de acceso a los mismos en forma gratuita a intervalos no inferiores a seis meses. Asimismo, podrá solicitar la rectificación, actualización o supresión de sus datos enviando un correo a soporte@cinematch.app.
+                El titular de los datos personales tiene la facultad de ejercer el derecho de acceso a los mismos en forma gratuita a intervalos no inferiores a seis meses. Asimismo, podrá solicitar la rectificación, actualización o supresión de sus datos enviando un correo a soporte@loovie.app.
               </p>
               <p className="mb-3">
                 La Agencia de Acceso a la Información Pública es el Órgano de Control de la Ley N° 25.326.
@@ -116,7 +117,7 @@ const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onD
 
 const SparkleIcon = () => (
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
-    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
   </svg>
 );
 

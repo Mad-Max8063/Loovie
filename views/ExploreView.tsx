@@ -1,12 +1,17 @@
 
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { MapPin, Calendar, Popcorn, ShieldCheck, Clapperboard, Heart, Ticket, Sparkles, Flame, Star } from 'lucide-react';
+import { MapPin, Calendar, Popcorn, ShieldCheck, Clapperboard, Heart, Ticket, Sparkles, Flame, Star, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
-const ExploreView: React.FC = () => {
-  const [swipeCount, setSwipeCount] = useState(0);
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
-  const { potentials, addLike, removePotential, t } = useAppContext();
+interface ExploreViewProps {
+  onSwipe?: () => void;
+  swipesRemaining?: number;
+}
+
+const ExploreView: React.FC<ExploreViewProps> = ({ onSwipe, swipesRemaining }) => {
+  const { potentials, addLike, removePotential, t, currentUser } = useAppContext();
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportSuccess, setReportSuccess] = useState(false);
   const [swipeState, setSwipeState] = useState<'none' | 'left' | 'right'>('none');
   const [isBurning, setIsBurning] = useState(false);
   const [showMatchAnimation, setShowMatchAnimation] = useState(false);
@@ -15,25 +20,24 @@ const ExploreView: React.FC = () => {
 
   const handleSwipeLeft = () => {
     if (!user || swipeState !== 'none' || isBurning) return;
-    
+
     setIsBurning(true);
     setTimeout(() => {
       setSwipeState('left');
       setTimeout(() => {
         removePotential(user.id);
         setSwipeState('none');
-        setSwipeCount(prev => prev + 1);
-        if (swipeCount >= 9) setShowPremiumModal(true);
+        if (onSwipe) onSwipe();
         setIsBurning(false);
       }, 400);
-    }, 500); 
+    }, 500);
   };
 
   const handleSwipeRight = () => {
     if (!user || swipeState !== 'none' || isBurning) return;
-    
+
     const isMatch = user.id === 'u4' || user.id === 'u2';
-    
+
     if (isMatch) {
       setShowMatchAnimation(true);
       setTimeout(() => {
@@ -42,6 +46,7 @@ const ExploreView: React.FC = () => {
           addLike(user.id);
           setSwipeState('none');
           setShowMatchAnimation(false);
+          if (onSwipe) onSwipe();
         }, 400);
       }, 800);
     } else {
@@ -49,6 +54,7 @@ const ExploreView: React.FC = () => {
       setTimeout(() => {
         addLike(user.id);
         setSwipeState('none');
+        if (onSwipe) onSwipe();
       }, 400);
     }
   };
@@ -61,7 +67,7 @@ const ExploreView: React.FC = () => {
         </div>
         <h2 className="text-xl font-bold italic">{t('explore_no_users_title')}</h2>
         <p className="text-neutral-400 text-sm">{t('explore_no_users_desc')}</p>
-        <button 
+        <button
           onClick={() => window.location.reload()}
           className="px-8 py-3 bg-red-700 rounded-full font-black text-xs uppercase tracking-tighter shadow-lg shadow-red-900/40 active:scale-95 transition-all"
         >
@@ -80,7 +86,7 @@ const ExploreView: React.FC = () => {
         ${showMatchAnimation ? 'ring-4 ring-[#d4af37] scale-[1.02] shadow-[0_0_60px_rgba(212,175,55,0.4)]' : ''}
         ${isBurning ? 'animate-film-burn' : ''}
       `}>
-        
+
         {/* Perforaciones Izquierda */}
         <div className="w-8 h-full bg-black flex flex-col justify-around py-2 items-center border-r border-white/5 z-20">
           {[...Array(12)].map((_, i) => (
@@ -90,29 +96,29 @@ const ExploreView: React.FC = () => {
 
         {/* Contenido Principal (El Fotograma) */}
         <div className="flex-1 relative overflow-hidden group">
-          <img 
-            src={user.photoUrl} 
+          <img
+            src={user.photoUrl}
             alt={user.displayName}
             className={`w-full h-full object-cover transition-all duration-700 ${isBurning ? 'sepia contrast-150 brightness-150 blur-sm' : 'brightness-90 group-hover:scale-105'}`}
           />
-          
+
           <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] animate-grain"></div>
 
           {/* Overlay de Match */}
           {showMatchAnimation && (
             <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/40 backdrop-blur-[2px] animate-in fade-in duration-300">
-               <div className="flex flex-col items-center animate-bounce-short">
-                  <div className="bg-[#d4af37] text-black px-6 py-2 rounded-lg font-black text-2xl italic tracking-[0.2em] transform -rotate-3 shadow-[0_0_30px_#d4af37] flex items-center gap-3">
-                    <Ticket size={24} />
-                    MATCH!
-                    <Ticket size={24} className="rotate-180" />
-                  </div>
-                  <div className="mt-4 flex gap-2">
-                    <Heart className="text-red-600 fill-red-600 animate-pulse" size={32} />
-                    <Heart className="text-red-600 fill-red-600 animate-pulse delay-75" size={32} />
-                    <Heart className="text-red-600 fill-red-600 animate-pulse delay-150" size={32} />
-                  </div>
-               </div>
+              <div className="flex flex-col items-center animate-bounce-short">
+                <div className="bg-[#d4af37] text-black px-6 py-2 rounded-lg font-black text-2xl italic tracking-[0.2em] transform -rotate-3 shadow-[0_0_30px_#d4af37] flex items-center gap-3">
+                  <Ticket size={24} />
+                  MATCH!
+                  <Ticket size={24} className="rotate-180" />
+                </div>
+                <div className="mt-4 flex gap-2">
+                  <Heart className="text-red-600 fill-red-600 animate-pulse" size={32} />
+                  <Heart className="text-red-600 fill-red-600 animate-pulse delay-75" size={32} />
+                  <Heart className="text-red-600 fill-red-600 animate-pulse delay-150" size={32} />
+                </div>
+              </div>
             </div>
           )}
 
@@ -126,9 +132,18 @@ const ExploreView: React.FC = () => {
 
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-6">
             <div className="mb-4">
-              <div className="flex items-center gap-2">
-                <h2 className="text-4xl font-black text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] uppercase tracking-tighter italic">{user.displayName}, {user.age}</h2>
-                <ShieldCheck className="text-blue-400 fill-blue-400/20" size={24} />
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-4xl font-black text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] uppercase tracking-tighter italic">{user.displayName}, {user.age}</h2>
+                  <ShieldCheck className="text-blue-400 fill-blue-400/20" size={24} />
+                </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setShowReportModal(true); }}
+                  className="p-2 bg-black/40 hover:bg-red-600/40 rounded-full border border-white/5 text-neutral-500 hover:text-white transition-all active:scale-90"
+                  title={t('safety_report')}
+                >
+                  <AlertTriangle size={16} />
+                </button>
               </div>
               <div className="flex items-center gap-1 text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mt-1 drop-shadow-md">
                 <MapPin size={12} className="text-red-600" />
@@ -168,9 +183,58 @@ const ExploreView: React.FC = () => {
         </div>
       </div>
 
+      {/* Modal de Reporte */}
+      {showReportModal && (
+        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-xl flex items-center justify-center p-6 animate-in fade-in duration-300">
+          <div className="bg-neutral-900 border border-white/10 rounded-[2.5rem] p-8 max-w-sm w-full text-center space-y-6 shadow-2xl animate-in zoom-in-95">
+            {!reportSuccess ? (
+              <>
+                <div className="w-20 h-20 bg-red-600/10 rounded-full flex items-center justify-center mx-auto border border-red-600/30">
+                  <AlertTriangle size={40} className="text-red-600" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('safety_report_title')}</h3>
+                  <p className="text-[10px] text-neutral-400 font-bold uppercase leading-relaxed">{t('safety_report_desc')}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <button
+                    onClick={() => setShowReportModal(false)}
+                    className="py-4 bg-neutral-800 text-neutral-400 rounded-2xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
+                  >
+                    {t('verification_cancel')}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setReportSuccess(true);
+                      setTimeout(() => {
+                        setShowReportModal(false);
+                        setReportSuccess(false);
+                        handleSwipeLeft(); // Descartar al reportar
+                      }, 2500);
+                    }}
+                    className="py-4 bg-red-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-red-950/40"
+                  >
+                    {t('safety_report')}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="py-10 space-y-6 animate-in zoom-in-95">
+                <div className="w-20 h-20 bg-green-600/10 rounded-full flex items-center justify-center mx-auto border border-green-600/30">
+                  <CheckCircle2 size={40} className="text-green-600" />
+                </div>
+                <p className="text-xs font-black text-white uppercase italic tracking-tighter leading-relaxed">
+                  {t('safety_report_success')}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Controles Estilo Consola de Cine */}
       <div className="flex items-center justify-center gap-8 py-4 relative z-50">
-        <button 
+        <button
           onClick={handleSwipeLeft}
           disabled={swipeState !== 'none' || isBurning}
           className="group flex flex-col items-center gap-2 active:scale-90 transition-all disabled:opacity-50"
@@ -181,16 +245,16 @@ const ExploreView: React.FC = () => {
           <span className="text-[9px] font-black text-neutral-600 tracking-[0.3em] uppercase group-hover:text-neutral-400">{t('explore_cut')}</span>
         </button>
 
-        <button 
+        <button
           onClick={handleSwipeRight}
           disabled={swipeState !== 'none' || isBurning}
           className="group flex flex-col items-center gap-2 active:scale-95 transition-all disabled:opacity-50"
         >
           <div className="w-20 h-20 rounded-full bg-red-700 border-4 border-black ring-2 ring-red-900 flex items-center justify-center shadow-[0_10px_30px_rgba(185,28,28,0.5)] group-hover:shadow-[0_15px_40px_rgba(185,28,28,0.7)] group-hover:scale-105 transition-all relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent"></div>
-            <Clapperboard 
-              size={32} 
-              className="text-white drop-shadow-md transition-transform duration-500 group-hover:rotate-12" 
+            <Clapperboard
+              size={32}
+              className="text-white drop-shadow-md transition-transform duration-500 group-hover:rotate-12"
             />
           </div>
           <span className="text-[10px] font-black text-white tracking-[0.4em] uppercase drop-shadow-lg">{t('explore_action')}</span>
@@ -230,6 +294,3 @@ const ExploreView: React.FC = () => {
 };
 
 export default ExploreView;
-
-
-
