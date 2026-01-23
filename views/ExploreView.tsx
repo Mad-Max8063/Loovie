@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { MapPin, Calendar, Popcorn, ShieldCheck, Clapperboard, Heart, Ticket, Flame, Sparkles } from 'lucide-react';
+import { MapPin, Calendar, Popcorn, ShieldCheck, Clapperboard, Heart, Ticket, Sparkles } from 'lucide-react';
 
 const ExploreView: React.FC = () => {
   const { potentials, addLike, removePotential, t } = useAppContext();
@@ -171,10 +171,10 @@ const ExploreView: React.FC = () => {
           disabled={swipeState !== 'none' || isBurning}
           className="group flex flex-col items-center gap-2 active:scale-90 transition-all disabled:opacity-50"
         >
-          <div className="w-16 h-16 rounded-full border-2 border-neutral-800 flex items-center justify-center bg-neutral-950 group-hover:bg-neutral-900 group-hover:border-red-600/50 transition-all shadow-xl">
-            <Flame size={28} className="text-neutral-700 group-hover:text-red-500 transition-colors" />
+          <div className="w-16 h-16 rounded-full border-2 border-neutral-800 flex items-center justify-center bg-neutral-950 group-hover:bg-neutral-900 group-hover:border-neutral-500 transition-all shadow-xl">
+            <Clapperboard size={28} className="text-neutral-700 group-hover:text-neutral-400 transition-all transform -rotate-12 -scale-x-100" />
           </div>
-          <span className="text-[9px] font-black text-neutral-600 tracking-[0.3em] uppercase group-hover:text-red-500">{t('explore_cut')}</span>
+          <span className="text-[9px] font-black text-neutral-600 tracking-[0.3em] uppercase group-hover:text-neutral-400">{t('explore_cut')}</span>
         </button>
 
         <button 
@@ -226,3 +226,6 @@ const ExploreView: React.FC = () => {
 };
 
 export default ExploreView;
+
+
+
