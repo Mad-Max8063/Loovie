@@ -32,8 +32,15 @@ const App: React.FC = () => {
   }, [currentUser]);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center overflow-x-hidden">
-      <div className={`w-full max-w-md flex-1 relative flex flex-col ${isDemoMode ? 'pt-10' : ''}`}>
+    <div className="h-screen w-screen bg-[#020202] text-white flex items-center justify-center overflow-hidden font-sans">
+      <div className={`w-full max-w-md h-full relative flex flex-col bg-black shadow-[0_0_80px_rgba(0,0,0,1)] border-x border-white/5 overflow-hidden ${isDemoMode ? 'pt-10' : ''}`}>
+        {isDemoMode && (
+          <DemoBanner
+            onRegisterClick={() => setAppState('auth')}
+            swipesRemaining={swipesRemaining}
+          />
+        )}
+
         {appState === 'landing' ? (
           <LandingView
             onStartDemo={() => {
