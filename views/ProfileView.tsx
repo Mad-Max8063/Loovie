@@ -6,7 +6,8 @@ import { getMovieRecommendations } from '../services/geminiService';
 import IdentityVerification from './IdentityVerification';
 
 const ProfileView: React.FC = () => {
-  const { currentUser, language, setLanguage, t, isUserVerified } = useAppContext();
+    const { currentUser, language, setLanguage, t, isUserVerified, logout } = useAppContext();
+  if (!currentUser) return null;
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showLangMenu, setShowLangMenu] = useState(false);
@@ -363,6 +364,9 @@ const ProfileView: React.FC = () => {
         
         <button className="w-full py-4 bg-neutral-900/40 text-neutral-400 font-black text-[11px] uppercase tracking-widest rounded-2xl border border-white/5 flex items-center gap-3 justify-center hover:bg-neutral-900 transition-all">
           <Settings size={18} /> {t('profile_settings')}
+        </button>
+        <button onClick={logout} className="w-full py-4 bg-red-900/10 text-red-500 font-black text-[11px] uppercase tracking-widest rounded-2xl border border-red-500/20 flex items-center gap-3 justify-center hover:bg-red-900/20 transition-all">
+          Cerrar Sesión
         </button>
       </div>
     </div>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
-import { AppProvider } from './context/AppContext';
+import { useAppContext } from './context/AppContext';
 import ExploreView from './views/ExploreView';
 import MatchesView from './views/MatchesView';
 import ProfileView from './views/ProfileView';
@@ -10,13 +10,21 @@ import PrivacyPolicyScreen from './views/PrivacyPolicyScreen';
 import { MessageSquare, X } from 'lucide-react';
 
 const App: React.FC = () => {
+  const { currentUser, isDemoMode, setDemoMode, login } = useAppContext();
   const [activeTab, setActiveTab] = useState<'explore' | 'matches' | 'profile'>('explore');
-  const [appState, setAppState] = useState<'landing' | 'privacy' | 'demo' | 'registered'>('landing');
+  const [appState, setAppState] = useState<'landing' | 'privacy' | 'app'>('landing');
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackSent, setFeedbackSent] = useState(false);
   const [demoSwipes, setDemoSwipes] = useState(5);
 
-  const isDemoMode = appState === 'demo';
+  // Sync internal landing state with global context
+  useEffect(() => {
+    if (currentUser) {
+      setAppState('app');
+    } else {
+      setAppState('landing');
+    }
+  }, [currentUser]);
 
   const handleDemoSwipe = () => {
     if (isDemoMode && demoSwipes > 0) {
@@ -37,32 +45,34 @@ const App: React.FC = () => {
     }
   };
 
-  // Landing screen
+  // 1. Landing View
   if (appState === 'landing') {
     return (
-      <AppProvider>
-        <LandingView 
-          onStartDemo={() => setAppState('demo')}
-          onStartRegister={() => setAppState('privacy')}
-        />
-      </AppProvider>
+      <LandingView 
+        onStartDemo={() => {
+          setDemoMode(true);
+          setAppState('app');
+        }}
+        onStartRegister={() => setAppState('privacy')}
+      />
     );
   }
 
-  // Privacy policy screen before registration
+  // 2. Privacy Policy
   if (appState === 'privacy') {
     return (
-      <AppProvider>
-        <PrivacyPolicyScreen 
-          onAccept={() => setAppState('registered')}
-          onDecline={() => setAppState('landing')}
-        />
-      </AppProvider>
+      <PrivacyPolicyScreen 
+        onAccept={() => {
+          login(); // Trigger Google Login
+        }}
+        onDecline={() => setAppState('landing')}
+      />
     );
   }
 
+  // 3. Main App View (Demo or Registered)
   return (
-    <AppProvider>
+    <div className="min-h-screen bg-black text-white">
       {/* Demo Banner */}
       {isDemoMode && (
         <DemoBanner 
@@ -79,22 +89,22 @@ const App: React.FC = () => {
 
       {/* Demo limit reached modal */}
       {isDemoMode && demoSwipes === 0 && (
-        <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-6">
-          <div className="bg-neutral-900 rounded-3xl p-8 max-w-sm text-center border border-white/10">
-            <div className="text-5xl mb-4">🎬</div>
+        <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-6 backdrop-blur-sm">
+          <div className="bg-neutral-900 rounded-3xl p-8 max-w-sm text-center border border-white/10 shadow-2xl">
+            <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">🎬</div>
             <h2 className="text-xl font-black text-white uppercase tracking-wider mb-2">¡Demo Completada!</h2>
-            <p className="text-xs text-neutral-400 mb-6">
-              Has explorado los perfiles de ejemplo. Regístrate para conocer personas reales que comparten tu pasión por el cine.
+            <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
+              Has explorado los perfiles de ejemplo. Regístrate con Google para conocer personas reales que comparten tu pasión por el cine.
             </p>
             <button
               onClick={() => setAppState('privacy')}
-              className="w-full py-4 bg-red-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest"
+              className="w-full py-5 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-red-950/20 active:scale-95 transition-all"
             >
               Crear Cuenta Gratis
             </button>
             <button
               onClick={() => { setDemoSwipes(5); }}
-              className="w-full py-3 mt-2 text-neutral-500 text-[10px] font-bold uppercase tracking-wider hover:text-white"
+              className="w-full py-3 mt-3 text-neutral-500 text-[10px] font-black uppercase tracking-[0.2em] hover:text-neutral-300 transition-colors"
             >
               Reiniciar Demo
             </button>
@@ -102,52 +112,55 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Floating Demo Feedback UI */}
+      {/* Canal de Feedback */}
       <div className="fixed bottom-24 right-4 z-[60]">
         {!showFeedback ? (
           <button 
             onClick={() => setShowFeedback(true)}
-            className="w-12 h-12 bg-[#d4af37] text-black rounded-full shadow-2xl flex items-center justify-center animate-bounce transition-transform active:scale-90"
+            className="w-14 h-14 bg-[#d4af37] text-black rounded-full shadow-2xl flex items-center justify-center animate-bounce hover:scale-110 transition-transform active:scale-95 shadow-[#d4af37]/20"
           >
-            <MessageSquare size={20} />
+            <MessageSquare size={24} />
           </button>
         ) : (
-          <div className="bg-neutral-900 border border-[#d4af37]/30 rounded-3xl p-6 shadow-[0_20px_60px_rgba(0,0,0,0.8)] w-72">
-            <div className="flex justify-between items-center mb-4">
-              <h4 className="text-[10px] font-black text-[#d4af37] uppercase tracking-widest">Feedback Demo</h4>
-              <button onClick={() => { setShowFeedback(false); setFeedbackSent(false); }} className="text-neutral-500 hover:text-white">
-                <X size={18} />
+          <div className="bg-neutral-900 border border-[#d4af37]/30 rounded-3xl p-6 shadow-[0_30px_60px_rgba(0,0,0,0.9)] w-80 transform transition-all animate-in fade-in slide-in-from-bottom-4">
+            <div className="flex justify-between items-center mb-5">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse"></div>
+                <h4 className="text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em]">Crítica de la App</h4>
+              </div>
+              <button onClick={() => { setShowFeedback(false); setFeedbackSent(false); }} className="text-neutral-600 hover:text-white transition-colors">
+                <X size={20} />
               </button>
             </div>
             
             {!feedbackSent ? (
               <div className="space-y-4">
-                <p className="text-xs text-neutral-300 font-bold leading-relaxed">¿Qué te pareció CineMatch?</p>
+                <p className="text-xs text-neutral-200 font-black leading-relaxed">¿Qué te parece la experiencia CineMatch hasta ahora?</p>
                 <textarea 
-                  className="w-full bg-black border border-white/10 rounded-xl p-3 text-xs text-white outline-none focus:border-[#d4af37]/50"
+                  className="w-full bg-black border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-[#d4af37]/40 transition-colors"
                   placeholder="Tu opinión nos ayuda a lanzar la app..."
-                  rows={3}
+                  rows={4}
                 />
                 <button 
                   onClick={() => setFeedbackSent(true)}
-                  className="w-full py-3 bg-red-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-red-900/20 active:scale-95 transition-all"
+                  className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-950/20 active:scale-95 transition-all"
                 >
-                  ENVIAR CRÍTICA
+                  ENVIAR FEEDBACK
                 </button>
               </div>
             ) : (
-              <div className="text-center py-4 space-y-2">
-                <div className="w-12 h-12 bg-green-600/20 text-green-500 rounded-full flex items-center justify-center mx-auto">
-                  <MessageSquare size={24} />
+              <div className="text-center py-6 space-y-3">
+                <div className="w-14 h-14 bg-green-950/30 text-green-500 rounded-full flex items-center justify-center mx-auto border border-green-500/20">
+                  <MessageSquare size={28} />
                 </div>
-                <p className="text-[10px] font-black text-white uppercase tracking-widest pt-2">¡Gracias por tu aporte!</p>
-                <p className="text-[9px] text-neutral-500 font-bold italic">Tu feedback fue registrado para la versión beta.</p>
+                <p className="text-[11px] font-black text-white uppercase tracking-widest pt-2">¡Oído en la sala!</p>
+                <p className="text-[9px] text-neutral-500 font-bold italic leading-relaxed px-4">Gracias. Tu crítica nos sirve para pulir los detalles finales del estreno.</p>
               </div>
             )}
           </div>
         )}
       </div>
-    </AppProvider>
+    </div>
   );
 };
 
