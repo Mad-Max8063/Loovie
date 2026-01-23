@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3172/3172551.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loovie - Encontrá tu compañero de película</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
@@ -45,7 +47,10 @@
         .cinema-grain::after {
             content: "";
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
             opacity: 0.05;
             pointer-events: none;
@@ -54,15 +59,80 @@
         }
 
         @keyframes grain {
-            0%, 100% { transform: translate(0, 0); }
-            25% { transform: translate(-1%, -1%); }
-            50% { transform: translate(1%, 1%); }
-            75% { transform: translate(-1%, 1%); }
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(-1%, -1%);
+            }
+
+            50% {
+                transform: translate(1%, 1%);
+            }
+
+            75% {
+                transform: translate(-1%, 1%);
+            }
+        }
+
+        @keyframes film-burn {
+            0% {
+                filter: contrast(100%) brightness(100%) saturate(100%);
+                transform: scale(1);
+            }
+
+            20% {
+                filter: contrast(150%) brightness(120%) saturate(200%) hue-rotate(20deg);
+                transform: scale(1.02) rotate(1deg);
+            }
+
+            50% {
+                filter: contrast(300%) brightness(200%) saturate(300%) blur(2px);
+            }
+
+            70% {
+                filter: contrast(500%) brightness(400%) blur(8px);
+            }
+
+            100% {
+                filter: contrast(1000%) brightness(1000%) blur(20px);
+                transform: scale(1.1) rotate(-2deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes bounce-short {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-10px) scale(1.05);
+            }
+        }
+
+        .animate-grain {
+            animation: grain 0.5s steps(1) infinite;
+        }
+
+        .animate-film-burn {
+            animation: film-burn 0.8s ease-in forwards;
+        }
+
+        .animate-bounce-short {
+            animation: bounce-short 0.8s ease-in-out infinite;
         }
     </style>
 </head>
+
 <body class="cinema-grain">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

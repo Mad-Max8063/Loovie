@@ -59,12 +59,17 @@ const PaywallModal: React.FC<PaywallModalProps> = ({ isOpen, onClose }) => {
                         }}
                         className="w-full py-5 bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-red-950/40 active:scale-95 transition-all mb-4"
                     >
-                        {t('premium_cta')}
+                        {t('premium_cta')} - {t('premium_price_launch')}
                     </button>
 
-                    <p className="text-[9px] text-neutral-600 font-bold uppercase tracking-widest italic">
-                        Desde $2.99/mes • Cancelá cuando quieras
-                    </p>
+                    <div className="flex flex-col items-center gap-1">
+                        <p className="text-[10px] text-white font-black uppercase tracking-widest">
+                            {t('premium_price_desc')}
+                        </p>
+                        <p className="text-[8px] text-neutral-600 font-bold uppercase tracking-widest italic mt-1">
+                            Pago único por lanzamiento • Acceso de por vida (Early Adopters)
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

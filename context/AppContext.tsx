@@ -165,7 +165,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const initiatePayment = () => {
-    const PAYMENT_URL = "https://mpago.la/example-loovie-premium";
+    const PAYMENT_URL = "https://mpago.la/12Ahst5";
     window.open(PAYMENT_URL, '_blank');
   };
 

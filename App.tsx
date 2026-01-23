@@ -88,7 +88,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center overflow-x-hidden">
       {isDemoMode && (
         <DemoBanner
           onRegisterClick={() => setAppState('auth')}
@@ -96,7 +96,7 @@ const App: React.FC = () => {
         />
       )}
 
-      <div className={isDemoMode ? 'pt-10' : ''}>
+      <div className={`w-full max-w-md flex-1 relative ${isDemoMode ? 'pt-10' : ''}`}>
         <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
           {renderView()}
         </Layout>
@@ -133,52 +133,54 @@ const App: React.FC = () => {
         </div>
       )}
 
-      <div className="fixed bottom-24 right-4 z-[60]">
-        {!showFeedback ? (
-          <button
-            onClick={() => setShowFeedback(true)}
-            className="w-14 h-14 bg-[#d4af37] text-black rounded-full shadow-2xl flex items-center justify-center animate-bounce hover:scale-110 transition-transform active:scale-95 shadow-[#d4af37]/20"
-          >
-            <MessageSquare size={24} />
-          </button>
-        ) : (
-          <div className="bg-neutral-900 border border-[#d4af37]/30 rounded-3xl p-6 shadow-[0_30px_60px_rgba(0,0,0,0.9)] w-80 transform transition-all animate-in fade-in slide-in-from-bottom-4">
-            <div className="flex justify-between items-center mb-5">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse"></div>
-                <h4 className="text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em]">Crítica de Loovie</h4>
-              </div>
-              <button onClick={() => { setShowFeedback(false); setFeedbackSent(false); }} className="text-neutral-600 hover:text-white transition-colors">
-                <X size={20} />
-              </button>
-            </div>
-
-            {!feedbackSent ? (
-              <div className="space-y-4">
-                <p className="text-xs text-neutral-200 font-black leading-relaxed">¿Qué te parece la experiencia CineMatch hasta ahora?</p>
-                <textarea
-                  className="w-full bg-black border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-[#d4af37]/40 transition-colors"
-                  placeholder="Tu opinión nos ayuda a lanzar la app..."
-                  rows={4}
-                />
-                <button
-                  onClick={() => setFeedbackSent(true)}
-                  className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-950/20 active:scale-95 transition-all"
-                >
-                  ENVIAR FEEDBACK
+      <div className="fixed bottom-24 right-4 z-[60] max-w-md w-full pointer-events-none flex justify-end px-4">
+        <div className="pointer-events-auto">
+          {!showFeedback ? (
+            <button
+              onClick={() => setShowFeedback(true)}
+              className="w-14 h-14 bg-[#d4af37] text-black rounded-full shadow-2xl flex items-center justify-center animate-bounce hover:scale-110 transition-transform active:scale-95 shadow-[#d4af37]/20"
+            >
+              <MessageSquare size={24} />
+            </button>
+          ) : (
+            <div className="bg-neutral-900 border border-[#d4af37]/30 rounded-3xl p-6 shadow-[0_30px_60px_rgba(0,0,0,0.9)] w-80 transform transition-all animate-in fade-in slide-in-from-bottom-4">
+              <div className="flex justify-between items-center mb-5">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse"></div>
+                  <h4 className="text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em]">Crítica de Loovie</h4>
+                </div>
+                <button onClick={() => { setShowFeedback(false); setFeedbackSent(false); }} className="text-neutral-600 hover:text-white transition-colors">
+                  <X size={20} />
                 </button>
               </div>
-            ) : (
-              <div className="text-center py-6 space-y-3">
-                <div className="w-14 h-14 bg-green-950/30 text-green-500 rounded-full flex items-center justify-center mx-auto border border-green-500/20">
-                  <MessageSquare size={28} />
+
+              {!feedbackSent ? (
+                <div className="space-y-4">
+                  <p className="text-xs text-neutral-200 font-black leading-relaxed">¿Qué te parece la experiencia CineMatch hasta ahora?</p>
+                  <textarea
+                    className="w-full bg-black border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-[#d4af37]/40 transition-colors"
+                    placeholder="Tu opinión nos ayuda a lanzar la app..."
+                    rows={4}
+                  />
+                  <button
+                    onClick={() => setFeedbackSent(true)}
+                    className="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-950/20 active:scale-95 transition-all"
+                  >
+                    ENVIAR FEEDBACK
+                  </button>
                 </div>
-                <p className="text-[11px] font-black text-white uppercase tracking-widest pt-2">¡Oído en la sala!</p>
-                <p className="text-[9px] text-neutral-500 font-bold italic leading-relaxed px-4">Gracias. Tu crítica nos sirve para pulir los detalles finales del estreno.</p>
-              </div>
-            )}
-          </div>
-        )}
+              ) : (
+                <div className="text-center py-6 space-y-3">
+                  <div className="w-14 h-14 bg-green-950/30 text-green-500 rounded-full flex items-center justify-center mx-auto border border-green-500/20">
+                    <MessageSquare size={28} />
+                  </div>
+                  <p className="text-[11px] font-black text-white uppercase tracking-widest pt-2">¡Oído en la sala!</p>
+                  <p className="text-[9px] text-neutral-500 font-bold italic leading-relaxed px-4">Gracias. Tu crítica nos sirve para pulir los detalles finales del estreno.</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
