@@ -7,7 +7,7 @@ import IdentityVerification from './IdentityVerification';
 import PaywallModal from '../components/PaywallModal';
 
 const ProfileView: React.FC = () => {
-  const { currentUser, language, setLanguage, t, isUserVerified, logout, isPremium } = useAppContext();
+  const { currentUser, language, setLanguage, t, isUserVerified, logout, isPremium, billboard, addToWatchlist, removeFromWatchlist } = useAppContext();
   if (!currentUser) return null;
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -234,6 +234,45 @@ const ProfileView: React.FC = () => {
               {g}
             </span>
           ))}
+        </div>
+      </section>
+
+      <section>
+        <div className="flex items-center gap-2 mb-5 px-1">
+          <Ticket className="text-red-700" size={20} />
+          <div className="flex flex-col">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500">{t('profile_watchlist_title')}</h3>
+            <span className="text-[8px] text-neutral-600 font-bold uppercase tracking-widest">{t('profile_watchlist_subtitle')}</span>
+          </div>
+        </div>
+        <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+          {billboard.map((movie) => {
+            const isSelected = currentUser.watchlist?.includes(movie.id);
+            return (
+              <div
+                key={movie.id}
+                onClick={() => isSelected ? removeFromWatchlist(movie.id) : addToWatchlist(movie.id)}
+                className={`flex-shrink-0 w-32 group cursor-pointer transition-all active:scale-95 ${isSelected ? 'scale-105' : 'opacity-60'}`}
+              >
+                <div className={`relative aspect-[2/3] rounded-2xl overflow-hidden border-2 transition-all ${isSelected ? 'border-red-600 shadow-[0_0_20px_rgba(220,38,38,0.4)]' : 'border-white/10 grayscale hover:grayscale-0'}`}>
+                  <img src={movie.imageUrl} alt={movie.title} className="w-full h-full object-cover" />
+                  {isSelected && (
+                    <div className="absolute top-2 right-2 bg-red-600 rounded-full p-1.5 shadow-lg border-2 border-black animate-in zoom-in duration-300">
+                      <Check size={12} className="text-white" />
+                    </div>
+                  )}
+                  {movie.isPremiere && (
+                    <div className="absolute bottom-2 left-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded-md border border-white/20">
+                      <span className="text-[7px] font-black text-white uppercase tracking-widest">ESTRENO</span>
+                    </div>
+                  )}
+                </div>
+                <h4 className={`mt-3 text-[9px] font-black uppercase tracking-tight text-center leading-tight transition-colors ${isSelected ? 'text-white' : 'text-neutral-500'}`}>
+                  {movie.title}
+                </h4>
+              </div>
+            );
+          })}
         </div>
       </section>
 

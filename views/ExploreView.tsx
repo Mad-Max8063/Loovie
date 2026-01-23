@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { MapPin, Calendar, Popcorn, ShieldCheck, Clapperboard, Heart, Ticket, Sparkles, Flame, Star, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { calculateDistance } from '../services/locationService';
 
 interface ExploreViewProps {
   onSwipe?: () => void;
@@ -145,9 +146,32 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSwipe, swipesRemaining }) =
                   <AlertTriangle size={16} />
                 </button>
               </div>
+
+              {/* Sello de Película Compartida */}
+              {user.watchlist?.some(mId => currentUser?.watchlist?.includes(mId)) && (
+                <div className="flex items-center gap-2 mt-2 bg-gradient-to-r from-red-600/20 to-[#d4af37]/20 border border-[#d4af37]/40 px-3 py-1.5 rounded-xl self-start animate-in slide-in-from-left duration-500">
+                  <Ticket size={14} className="text-[#d4af37] fill-[#d4af37]/20" />
+                  <span className="text-[9px] font-black text-white uppercase tracking-wider">
+                    {t('profile_watchlist_match_tag')}
+                  </span>
+                </div>
+              )}
+
               <div className="flex items-center gap-1 text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mt-1 drop-shadow-md">
                 <MapPin size={12} className="text-red-600" />
-                <span>{t('explore_distance')}</span>
+                <span>
+                  {user.city && currentUser?.location
+                    ? t('explore_distance_dynamic')
+                      .replace('{city}', user.city)
+                      .replace('{dist}', calculateDistance(
+                        currentUser.location.lat,
+                        currentUser.location.lng,
+                        user.location?.lat,
+                        user.location?.lng
+                      ) || '0').toString()
+                    : t('explore_distance')
+                  }
+                </span>
               </div>
             </div>
 

@@ -1,0 +1,40 @@
+# Loovie: Manual del Estreno 🎬
+
+¡Felicitaciones! Has completado y lanzado tu primera aplicación premium para cinéfilos. Este documento sirve como brújula para que puedas gestionar y escalar **Loovie** en el futuro.
+
+## 🌟 El Producto: Loovie
+Loovie no es solo una app de citas; es una plataforma de **intención cinematográfica**. El objetivo es que la gente deje de chatear y empiece a ir al cine.
+
+### Características Core:
+- **Billboard Match**: Algoritmo que agrupa usuarios por películas específicas que quieren ver de la cartelera real.
+- **Protocolo de Seguridad**: Shield icon con consejos offline y verificación biométrica simulada.
+- **Monetización**: Sistema de Paywall Premium, límites de swipes diarios y validación de sponsors (Movistar Cine).
+- **Geolocalización**: Cálculo de distancia real (Haversine) para asegurar encuentros locales.
+
+## 🛠️ Stack Tecnológico
+- **Frontend**: React + Vite + TailwindCSS + Lucide Icons.
+- **Estilo**: Diseño "Dark Cinema" con efectos de grano de película y micro-animaciones.
+- **Backend/Auth**: Firebase (Authentication + Firestore).
+- **IA**: Google Gemini API (para Icebreakers y recomendaciones colaborativas).
+
+## 🚀 Guía de Lanzamiento (Vercel)
+Tu app está configurada para **Vercel**. Cada vez que hagas un cambio y lo subas a GitHub, la web se actualizará sola.
+1. Conecta tu repo `Mad-Max8063/Loovie` en Vercel.
+2. Copia tus variables del [.env](file:///C:/Users/domin/.gemini/antigravity/brain/8dbdab44-4fc7-44de-834d-88d844dc7791/cine-match/.env) a la configuración de Vercel.
+3. El comando de build es `npm run build` y la carpeta de salida es `dist`.
+
+## 🗺️ Mapa de Archivos Clave
+- [context/AppContext.tsx](file:///C:/Users/domin/.gemini/antigravity/brain/8dbdab44-4fc7-44de-834d-88d844dc7791/cine-match/context/AppContext.tsx): El corazón de la app. Gestiona el estado de usuario, matches y watchlist.
+- [constants.ts](file:///C:/Users/domin/.gemini/antigravity/brain/8dbdab44-4fc7-44de-834d-88d844dc7791/cine-match/constants.ts): Contiene la **Cartelera Real** y los usuarios de prueba.
+- [translations.ts](file:///C:/Users/domin/.gemini/antigravity/brain/8dbdab44-4fc7-44de-834d-88d844dc7791/cine-match/translations.ts): Todo el texto en Castellano (AR) e Inglés (US).
+- [views/ExploreView.tsx](file:///C:/Users/domin/.gemini/antigravity/brain/8dbdab44-4fc7-44de-834d-88d844dc7791/cine-match/views/ExploreView.tsx): La pantalla principal de "Cartelera" para swipear.
+- [views/MatchesView.tsx](file:///C:/Users/domin/.gemini/antigravity/brain/8dbdab44-4fc7-44de-834d-88d844dc7791/cine-match/views/MatchesView.tsx): El centro de mensajes y planes de cita.
+
+## 🔮 Hoja de Ruta Sugerida
+1. **Automatizar Cartelera**: Conectar una API como TMDB para que las películas se actualicen solas cada semana.
+2. **Pagos Reales**: Cambiar el link simbólico de Mercado Pago por el SDK oficial para cobrar membresías.
+3. **Notificaciones**: Implementar avisos cuando alguien quiere ver la misma película que vos.
+
+---
+
+**Loovie** está listo para su gran gira mundial. ¡Que disfrutes la función! 🍿✨🍿

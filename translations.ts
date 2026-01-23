@@ -11,6 +11,7 @@ export const translations = {
     explore_refresh: 'Actualizar Cartelera',
     explore_distance: 'Cerca de Caballito, a 2 km',
     explore_available: 'Disponible',
+    explore_distance_dynamic: 'En {city}, a {dist} km',
     explore_action: '¡ACCIÓN!',
     explore_cut: '¡CORTE!',
     matches_search: 'Buscar citas...',
@@ -132,7 +133,12 @@ export const translations = {
     safety_tip_3_desc: 'Asegurate de tener cómo volver por tu cuenta. No dependas del otro.',
     safety_tip_4_title: 'Confía en tu Instinto',
     safety_tip_4_desc: 'Si algo se siente fuera de guion o "peligroso", cortá la escena y andate.',
-    safety_tip_cta: 'Entendido, ¡disfrutá la función!'
+    safety_tip_cta: 'Entendido, ¡disfrutá la función!',
+    profile_watchlist_title: 'Tu Cartelera de Estreno',
+    profile_watchlist_subtitle: 'Citas planeadas para ir al cine',
+    profile_watchlist_add: 'Agregar a mi cita',
+    profile_watchlist_remove: 'Quitar de mi cita',
+    profile_watchlist_match_tag: '¡También quiere ver esta!',
   },
   'en-US': {
     premium_title: 'Loovie Premium',
@@ -146,6 +152,7 @@ export const translations = {
     explore_refresh: 'Refresh Billboard',
     explore_distance: 'Near Broadway, 2 miles away',
     explore_available: 'Available',
+    explore_distance_dynamic: 'In {city}, {dist} km away',
     explore_action: 'ACTION!',
     explore_cut: 'CUT!',
     matches_search: 'Search matches...',
@@ -267,6 +274,11 @@ export const translations = {
     safety_tip_3_desc: 'Make sure you have a way to get home on your own.',
     safety_tip_4_title: 'Trust Your Gut',
     safety_tip_4_desc: 'If something feels off or "dangerous", cut the scene and leave.',
-    safety_tip_cta: 'Got it, enjoy the show!'
+    safety_tip_cta: 'Got it, enjoy the show!',
+    profile_watchlist_title: 'Your Premiere Billboard',
+    profile_watchlist_subtitle: 'Planned cinema dates',
+    profile_watchlist_add: 'Add to my date',
+    profile_watchlist_remove: 'Remove from my date',
+    profile_watchlist_match_tag: 'Also wants to see this!',
   }
 };

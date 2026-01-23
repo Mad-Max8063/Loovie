@@ -18,7 +18,9 @@ export interface UserProfile {
   intentMode: IntentMode;
   likes?: string[];
   location?: { lat: number; lng: number };
+  city?: string;
   isVerified?: boolean;
+  watchlist?: string[]; // IDs of movies from the Billboard
 }
 
 export interface Match {
@@ -26,6 +28,7 @@ export interface Match {
   users: [string, string];
   timestamp: number;
   lastMessage?: string;
+  matchedMovieId?: string; // Optional: ID of the movie that triggered the match
 }
 
 export interface Message {
@@ -37,9 +40,11 @@ export interface Message {
 }
 
 export interface Movie {
+  id: string;
   title: string;
-  genre: string[];
   description: string;
-  rating: number;
   imageUrl: string;
+  genres: string[];
+  releaseDate: string;
+  isPremiere?: boolean;
 }

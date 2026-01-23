@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { UserProfile, Match, Message, Language, IntentMode } from '../types';
-import { MOCK_USERS } from '../constants';
+import { UserProfile, Match, Message, Language, IntentMode, Movie } from '../types';
+import { MOCK_USERS, BILLBOARD } from '../constants';
 import { translations } from '../translations';
 import { shouldMatch } from '../services/matchingService';
 import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '../services/firebase';
@@ -35,6 +35,9 @@ interface AppContextType {
   activeSponsor: { name: string, logo?: string } | null;
   handleApplyPromo: (months: number) => void;
   initiatePayment: () => void;
+  billboard: Movie[];
+  addToWatchlist: (movieId: string) => void;
+  removeFromWatchlist: (movieId: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -148,7 +151,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         bio: 'Probando la app. ¡Me encanta el cine nacional!',
         favoriteGenres: ['Ciencia Ficción', 'Cine Independiente'],
         availability: ['Fines de semana'],
-        intentMode: IntentMode.DEEP_TALK
+        intentMode: IntentMode.DEEP_TALK,
+        watchlist: []
       });
       setPotentials(MOCK_USERS);
       setSwipesRemaining(10);
@@ -163,6 +167,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const initiatePayment = () => {
     const PAYMENT_URL = "https://mpago.la/example-loovie-premium";
     window.open(PAYMENT_URL, '_blank');
+  };
+
+  const addToWatchlist = (movieId: string) => {
+    if (!currentUser) return;
+    setCurrentUser(prev => prev ? {
+      ...prev,
+      watchlist: [...(prev.watchlist || []), movieId]
+    } : null);
+  };
+
+  const removeFromWatchlist = (movieId: string) => {
+    if (!currentUser) return;
+    setCurrentUser(prev => prev ? {
+      ...prev,
+      watchlist: (prev.watchlist || []).filter(id => id !== movieId)
+    } : null);
   };
 
   const decrementSwipes = useCallback(() => {
@@ -192,10 +212,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } else {
       const matchedUser = MOCK_USERS.find(u => u.id === id);
       if (matchedUser && shouldMatch(currentUser, matchedUser)) {
+        // Simple logic: if both have the same movie in watchlist, it's a Movie Match
+        const sharedMovie = currentUser.watchlist?.find(mId => matchedUser.watchlist?.includes(mId));
+
         setMatches(prev => [...prev, {
           id: `m-${Date.now()}-${id}`,
           users: [currentUser.id, id],
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          matchedMovieId: sharedMovie
         }]);
       }
     }
@@ -226,7 +250,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addLike, removePotential, sendMessage, login, logout,
       isDemoMode, setDemoMode, needsProfileSetup, setActiveChatId,
       refreshProfile, isPremium, setIsPremium, swipesRemaining,
-      decrementSwipes, activeSponsor, handleApplyPromo, initiatePayment
+      decrementSwipes, activeSponsor, handleApplyPromo, initiatePayment,
+      billboard: BILLBOARD,
+      addToWatchlist, removeFromWatchlist
     }}>
       {children}
     </AppContext.Provider>

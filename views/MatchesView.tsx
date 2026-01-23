@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { MOCK_USERS } from '../constants';
+import { MOCK_USERS, BILLBOARD } from '../constants';
 import { Search, Send, ArrowLeft, Popcorn, Ticket, MoreVertical, AlertTriangle, ShieldCheck, CheckCircle2, Lock, Shield } from 'lucide-react';
 import { getIcebreaker, getCollaborativeRecommendation } from '../services/geminiService';
 import PaywallModal from '../components/PaywallModal';
@@ -65,7 +65,17 @@ const MatchesView: React.FC = () => {
                     </div>
                     <div className="flex-1">
                         <h3 className="font-bold text-sm text-white">{matchedUser.displayName}</h3>
-                        <span className="text-[9px] text-green-500 uppercase font-black tracking-widest">{t('chat_online')}</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[9px] text-green-500 uppercase font-black tracking-widest">{t('chat_online')}</span>
+                            {activeMatch?.matchedMovieId && (
+                                <div className="flex items-center gap-1 bg-red-600/10 px-2 py-0.5 rounded border border-red-600/20">
+                                    <Ticket size={10} className="text-red-600" />
+                                    <span className="text-[8px] font-black text-[#d4af37] uppercase tracking-tighter">
+                                        Cita: {BILLBOARD.find(m => m.id === activeMatch.matchedMovieId)?.title}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="relative">
@@ -249,6 +259,7 @@ const MatchesView: React.FC = () => {
                                     <img src={user.photoUrl} alt="" className="w-full h-full object-cover rounded-full" />
                                 </div>
                                 <span className="text-[10px] font-black text-neutral-400 uppercase tracking-tighter">{user.displayName}</span>
+                                {user.city && <span className="text-[8px] text-neutral-600 font-bold uppercase tracking-tight">{user.city}</span>}
                             </button>
                         );
                     })}
