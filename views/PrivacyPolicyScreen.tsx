@@ -10,7 +10,7 @@ interface PrivacyPolicyScreenProps {
 const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onDecline }) => {
   const { t } = useAppContext();
   return (
-    <div className="fixed inset-0 z-[150] bg-black flex flex-col font-sans">
+    <div className="absolute inset-0 bg-black flex flex-col font-sans overflow-hidden">
       {/* Header con gradiente cinematográfico */}
       <div className="h-48 bg-gradient-to-b from-red-950/40 to-black flex flex-col items-center justify-center p-6 text-center border-b border-white/5">
         <Shield size={48} className="text-red-500 mb-2 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />

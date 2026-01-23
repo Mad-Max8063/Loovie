@@ -104,7 +104,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [currentUser, isDemoMode]);
 
   useEffect(() => {
-    setActiveSponsor({ name: 'Movistar Cine' });
+    setActiveSponsor({ name: 'Loovie Prime' });
   }, []);
 
   const refreshProfile = async () => {

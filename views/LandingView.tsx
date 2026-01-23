@@ -13,7 +13,7 @@ const LandingView: React.FC<LandingViewProps> = ({ onStartDemo, onStartRegister,
   const { t } = useAppContext();
 
   return (
-    <div className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center p-8 overflow-hidden">
+    <div className="absolute inset-0 bg-black flex flex-col items-center justify-center p-8 overflow-hidden">
       {/* Background Cinematic Video/Pattern */}
       <div className="absolute inset-0 opacity-40">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black z-10"></div>

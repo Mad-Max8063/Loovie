@@ -29,8 +29,8 @@ const AuthView: React.FC<AuthViewProps> = ({ onBack }) => {
 
   const handleGoogle = async () => {
     setLoading(true);
-    try { 
-      await login('google'); 
+    try {
+      await login('google');
     } catch (err) {
       setError('Error with Google Sign-in');
     } finally {
@@ -39,7 +39,7 @@ const AuthView: React.FC<AuthViewProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[300] bg-black flex flex-col p-8 overflow-y-auto">
+    <div className="absolute inset-0 bg-black flex flex-col p-8 overflow-y-auto">
       <button onClick={onBack} className="self-start p-3 text-neutral-500 hover:text-white transition-colors">
         <ArrowLeft size={24} />
       </button>
@@ -52,7 +52,7 @@ const AuthView: React.FC<AuthViewProps> = ({ onBack }) => {
         </div>
 
         <div className="w-full space-y-4">
-          <button 
+          <button
             onClick={handleGoogle}
             className="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 active:scale-95 transition-all shadow-xl"
           >
@@ -69,30 +69,30 @@ const AuthView: React.FC<AuthViewProps> = ({ onBack }) => {
           <form onSubmit={handleAuth} className="space-y-3">
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-600" size={18} />
-              <input 
-                type="email" 
+              <input
+                type="email"
                 placeholder={t('auth_email')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-neutral-900 border border-white/5 rounded-2xl p-4 pl-12 text-xs text-white outline-none focus:border-red-600/50 transition-colors" 
+                className="w-full bg-neutral-900 border border-white/5 rounded-2xl p-4 pl-12 text-xs text-white outline-none focus:border-red-600/50 transition-colors"
               />
             </div>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-600" size={18} />
-              <input 
-                type="password" 
+              <input
+                type="password"
                 placeholder={t('auth_password')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-neutral-900 border border-white/5 rounded-2xl p-4 pl-12 text-xs text-white outline-none focus:border-red-600/50 transition-colors" 
+                className="w-full bg-neutral-900 border border-white/5 rounded-2xl p-4 pl-12 text-xs text-white outline-none focus:border-red-600/50 transition-colors"
               />
             </div>
 
             {error && <p className="text-red-500 text-[10px] font-black uppercase text-center">{error}</p>}
 
-            <button 
+            <button
               type="submit"
               disabled={loading}
               className="w-full py-4 bg-red-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg"
@@ -106,7 +106,7 @@ const AuthView: React.FC<AuthViewProps> = ({ onBack }) => {
             </button>
           </form>
 
-          <button 
+          <button
             onClick={() => setIsSignup(!isSignup)}
             className="w-full py-2 text-neutral-500 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors"
           >

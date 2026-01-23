@@ -31,75 +31,45 @@ const App: React.FC = () => {
     }
   }, [currentUser]);
 
-  const renderView = () => {
-    switch (activeTab) {
-      case 'explore':
-        return <ExploreView onSwipe={decrementSwipes} swipesRemaining={swipesRemaining} />;
-      case 'matches':
-        return <MatchesView />;
-      case 'profile':
-        return <ProfileView />;
-      default:
-        return <ExploreView onSwipe={handleDemoSwipe} swipesRemaining={isDemoMode ? demoSwipes : undefined} />;
-    }
-  };
-
-  if (appState === 'landing') {
-    return (
-      <LandingView
-        onStartDemo={() => {
-          setPrivacyIntent('demo');
-          setAppState('privacy');
-        }}
-        onStartRegister={() => {
-          setPrivacyIntent('auth');
-          setAppState('privacy');
-        }}
-        sponsor={activeSponsor}
-      />
-    );
-  }
-
-  if (appState === 'privacy') {
-    return (
-      <PrivacyPolicyScreen
-        onAccept={() => {
-          if (privacyIntent === 'demo') {
-            setDemoMode(true);
-            setAppState('app');
-          } else {
-            setAppState('auth');
-          }
-        }}
-        onDecline={() => {
-          setPrivacyIntent(null);
-          setAppState('landing');
-        }}
-      />
-    );
-  }
-
-  if (appState === 'auth') {
-    return <AuthView onBack={() => setAppState('landing')} />;
-  }
-
-  if (needsProfileSetup) {
-    return <ProfileSetupView />;
-  }
-
   return (
     <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center overflow-x-hidden">
-      {isDemoMode && (
-        <DemoBanner
-          onRegisterClick={() => setAppState('auth')}
-          swipesRemaining={swipesRemaining}
-        />
-      )}
-
-      <div className={`w-full max-w-md flex-1 relative ${isDemoMode ? 'pt-10' : ''}`}>
-        <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-          {renderView()}
-        </Layout>
+      <div className={`w-full max-w-md flex-1 relative flex flex-col ${isDemoMode ? 'pt-10' : ''}`}>
+        {appState === 'landing' ? (
+          <LandingView
+            onStartDemo={() => {
+              setPrivacyIntent('demo');
+              setAppState('privacy');
+            }}
+            onStartRegister={() => {
+              setPrivacyIntent('auth');
+              setAppState('privacy');
+            }}
+            sponsor={activeSponsor}
+          />
+        ) : appState === 'privacy' ? (
+          <PrivacyPolicyScreen
+            onAccept={() => {
+              if (privacyIntent === 'demo') {
+                setDemoMode(true);
+                setAppState('app');
+              } else {
+                setAppState('auth');
+              }
+            }}
+            onDecline={() => {
+              setPrivacyIntent(null);
+              setAppState('landing');
+            }}
+          />
+        ) : appState === 'auth' ? (
+          <AuthView onBack={() => setAppState('landing')} />
+        ) : needsProfileSetup ? (
+          <ProfileSetupView />
+        ) : (
+          <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
+            {renderView()}
+          </Layout>
+        )}
       </div>
 
       {(isDemoMode || !isPremium) && swipesRemaining === 0 && (
