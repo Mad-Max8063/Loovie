@@ -10,17 +10,16 @@ interface PrivacyPolicyScreenProps {
 const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onDecline }) => {
   const { t } = useAppContext();
   return (
-    <div className="h-full w-full bg-black flex flex-col font-sans overflow-hidden">
+    <div className="flex-1 w-full bg-black flex flex-col font-sans overflow-y-auto no-scrollbar relative min-h-0">
       {/* Header con gradiente cinematográfico */}
-      <div className="h-48 bg-gradient-to-b from-red-950/40 to-black flex flex-col items-center justify-center p-6 text-center border-b border-white/5">
+      <div className="h-48 bg-gradient-to-b from-red-950/40 to-black flex flex-col items-center justify-center p-6 text-center border-b border-white/5 flex-shrink-0">
         <Shield size={48} className="text-red-500 mb-2 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
         <h1 className="text-2xl font-black text-white uppercase tracking-[0.2em]">LOOVIE</h1>
         <p className="text-neutral-400 text-xs mt-1">{t('privacy_subtitle')}</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-8 pb-40">
+      <div className="flex-1 px-6 py-8">
         <div className="max-w-md mx-auto space-y-10">
-
           {/* Sección Amigable: Resumen Transparente */}
           <section className="space-y-6">
             <h2 className="text-[10px] font-black text-red-500 uppercase tracking-[0.3em] flex items-center gap-2">
@@ -84,7 +83,7 @@ const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onD
             </div>
           </section>
 
-          <div className="flex items-start gap-3 p-4 bg-red-900/10 border border-red-900/30 rounded-2xl">
+          <div className="flex items-start gap-3 p-4 bg-red-900/10 border border-red-900/30 rounded-2xl mb-10">
             <AlertCircle size={16} className="text-red-500 flex-shrink-0 mt-0.5" />
             <p className="text-[10px] text-red-400/80 leading-relaxed">
               Al tocar el botón de abajo, confirmás que sos mayor de 18 años y aceptás estos términos. Queremos que tu experiencia sea de película, pero con reglas claras.
@@ -93,9 +92,9 @@ const PrivacyPolicyScreen: React.FC<PrivacyPolicyScreenProps> = ({ onAccept, onD
         </div>
       </div>
 
-      {/* Footer Fijo */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black via-black to-transparent backdrop-blur-sm">
-        <div className="max-w-md mx-auto space-y-4">
+      {/* Footer Ajustado al flujo del shell */}
+      <div className="mt-auto p-6 bg-gradient-to-t from-black via-black to-transparent border-t border-white/5 sticky bottom-0 z-10 w-full backdrop-blur-sm">
+        <div className="max-w-sm mx-auto space-y-4">
           <button
             onClick={onAccept}
             className="w-full py-5 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-[0_10px_30px_rgba(220,38,38,0.3)]"
