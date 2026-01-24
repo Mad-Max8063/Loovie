@@ -7,7 +7,11 @@ import IdentityVerification from './IdentityVerification';
 import PaywallModal from '../components/PaywallModal';
 
 const ProfileView: React.FC = () => {
-  const { currentUser, language, setLanguage, t, isUserVerified, logout, isPremium, billboard, addToWatchlist, removeFromWatchlist } = useAppContext();
+  const {
+    currentUser, language, setLanguage, t, isUserVerified, logout,
+    isPremium, billboard, addToWatchlist, removeFromWatchlist,
+    toggleVisibility, isProfileVisible
+  } = useAppContext();
   if (!currentUser) return null;
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -91,6 +95,29 @@ const ProfileView: React.FC = () => {
         <Share2 size={18} />
         {t('profile_share')}
       </button>
+
+      {/* Standby Mode Toggle */}
+      <div className="w-full p-6 bg-neutral-900/40 border border-white/5 rounded-[2.5rem] flex flex-col gap-4 backdrop-blur-sm relative overflow-hidden">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className={`p-3 rounded-2xl transition-colors ${!isProfileVisible ? 'bg-orange-600/20 text-orange-500' : 'bg-green-600/20 text-green-500'}`}>
+              <Lock size={20} />
+            </div>
+            <div>
+              <h4 className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">{t('profile_visibility')}</h4>
+              <p className={`text-xs font-black uppercase tracking-wider ${!isProfileVisible ? 'text-orange-500' : 'text-green-500'}`}>
+                {isProfileVisible ? t('profile_standby_off') : t('profile_standby_on')}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={toggleVisibility}
+            className={`w-14 h-8 rounded-full relative transition-all duration-300 ${!isProfileVisible ? 'bg-orange-600' : 'bg-neutral-800'}`}
+          >
+            <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ${!isProfileVisible ? 'left-7' : 'left-1'}`}></div>
+          </button>
+        </div>
+      </div>
 
       {isShareModalOpen && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-300">

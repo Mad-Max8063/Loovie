@@ -38,6 +38,8 @@ interface AppContextType {
   billboard: Movie[];
   addToWatchlist: (movieId: string) => void;
   removeFromWatchlist: (movieId: string) => void;
+  toggleVisibility: () => void;
+  isProfileVisible: boolean;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -57,6 +59,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isPremium, setIsPremium] = useState(false);
   const [swipesRemaining, setSwipesRemaining] = useState(10);
   const [activeSponsor, setActiveSponsor] = useState<{ name: string, logo?: string } | null>(null);
+
+  const [isProfileVisible, setIsProfileVisible] = useState(true);
+
+  useEffect(() => {
+    if (currentUser) {
+      setIsProfileVisible(currentUser.isVisible !== false);
+    }
+  }, [currentUser]);
+
+  const toggleVisibility = async () => {
+    if (!currentUser) return;
+    const newStatus = !isProfileVisible;
+    setIsProfileVisible(newStatus);
+
+    if (!isDemoMode) {
+      const updatedProfile = { ...currentUser, isVisible: newStatus };
+      await dbService.saveUser(updatedProfile);
+    } else {
+      setCurrentUser(prev => prev ? { ...prev, isVisible: newStatus } : null);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -78,7 +101,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             bio: '',
             favoriteGenres: [],
             availability: [],
-            intentMode: IntentMode.FRIENDSHIP
+            intentMode: IntentMode.FRIENDSHIP,
+            isVisible: true
           });
           setNeedsProfileSetup(true);
         }
@@ -93,12 +117,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     const fetchPotentials = async () => {
+      let users: UserProfile[] = [];
       if (currentUser && !isDemoMode) {
-        const users = await dbService.getAllUsers(currentUser.id);
-        setPotentials(users);
+        users = await dbService.getAllUsers(currentUser.id);
       } else if (isDemoMode) {
-        setPotentials(MOCK_USERS);
+        users = MOCK_USERS;
       }
+
+      // Filter out those in Standby Mode
+      setPotentials(users.filter(u => u.isVisible !== false));
     };
     fetchPotentials();
   }, [currentUser, isDemoMode]);
@@ -152,7 +179,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         favoriteGenres: ['Ciencia Ficción', 'Cine Independiente'],
         availability: ['Fines de semana'],
         intentMode: IntentMode.DEEP_TALK,
-        watchlist: []
+        watchlist: [],
+        isVisible: true
       });
       setPotentials(MOCK_USERS);
       setSwipesRemaining(10);
@@ -252,7 +280,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       refreshProfile, isPremium, setIsPremium, swipesRemaining,
       decrementSwipes, activeSponsor, handleApplyPromo, initiatePayment,
       billboard: BILLBOARD,
-      addToWatchlist, removeFromWatchlist
+      addToWatchlist, removeFromWatchlist,
+      toggleVisibility, isProfileVisible
     }}>
       {children}
     </AppContext.Provider>

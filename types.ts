@@ -20,6 +20,7 @@ export interface UserProfile {
   location?: { lat: number; lng: number };
   city?: string;
   isVerified?: boolean;
+  isVisible?: boolean;
   watchlist?: string[]; // IDs of movies from the Billboard
 }
 

@@ -142,6 +142,9 @@ export const translations = {
     profile_watchlist_remove: 'Quitar de mi cita',
     profile_watchlist_match_tag: '¡También quiere ver esta!',
     vip_code_terms: 'Pase VIP activado. El incumplimiento de las normas de conducta anula este beneficio.',
+    profile_visibility: 'Visibilidad del Perfil',
+    profile_standby_on: 'MODO STANDBY (OCULTO)',
+    profile_standby_off: 'MODO PÚBLICO (VISIBLE)',
   },
   'en-US': {
     premium_title: 'Loovie Premium',
@@ -286,5 +289,8 @@ export const translations = {
     profile_watchlist_remove: 'Remove from my date',
     profile_watchlist_match_tag: 'Also wants to see this!',
     vip_code_terms: 'VIP Pass activated. Violation of conduct rules will void this benefit.',
+    profile_visibility: 'Profile Visibility',
+    profile_standby_on: 'STANDBY MODE (HIDDEN)',
+    profile_standby_off: 'PUBLIC MODE (VISIBLE)',
   }
 };
