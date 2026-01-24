@@ -39,7 +39,7 @@ const AuthView: React.FC<AuthViewProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="absolute inset-0 bg-black flex flex-col p-8 overflow-y-auto">
+    <div className="flex-1 flex flex-col bg-black p-8 overflow-y-auto no-scrollbar">
       <button onClick={onBack} className="self-start p-3 text-neutral-500 hover:text-white transition-colors">
         <ArrowLeft size={24} />
       </button>
