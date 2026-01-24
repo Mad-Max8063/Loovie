@@ -18,7 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
         <div className="flex items-center gap-2">
           <Clapperboard className="text-red-600 w-6 h-6" />
           <h1 className="text-2xl font-black tracking-tighter italic uppercase text-white" style={{ fontFamily: 'Impact, sans-serif' }}>
-            CINE<span className="text-red-600">MATCH</span>
+            LOO<span className="text-red-600">VIE</span>
           </h1>
         </div>
         <div className="flex items-center gap-3">

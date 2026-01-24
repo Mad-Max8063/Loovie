@@ -55,7 +55,7 @@ export const translations = {
     share_guide_2: 'Copiá la URL real',
     share_guide_3: 'Pegala aquí',
     share_guide_4: '¡Listo!',
-    share_footer: 'ADMIT ONE - CINEMATCH EXCLUSIVE',
+    share_footer: 'ADMIT ONE - LOOVIE EXCLUSIVE',
     security_verified: 'Identidad Verificada',
     security_verify_btn: 'Validar Identidad',
     security_verifying: 'Escaneando rostro...',

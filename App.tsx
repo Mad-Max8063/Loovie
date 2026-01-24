@@ -151,7 +151,7 @@ const App: React.FC = () => {
 
             {!feedbackSent ? (
               <div className="space-y-4">
-                <p className="text-xs text-neutral-200 font-black leading-relaxed">¿Qué te parece la experiencia CineMatch hasta ahora?</p>
+                <p className="text-xs text-neutral-200 font-black leading-relaxed">¿Qué te parece la experiencia Loovie hasta ahora?</p>
                 <textarea
                   className="w-full bg-black border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-[#d4af37]/40 transition-colors"
                   placeholder="Tu opinión nos ayuda a lanzar la app..."
