@@ -36,7 +36,7 @@ const ProfileSetupView: React.FC = () => {
     };
 
     return (
-        <div className="fixed inset-0 z-[400] bg-black flex flex-col p-8 overflow-y-auto">
+        <div className="flex-1 flex flex-col bg-black p-8 overflow-y-auto no-scrollbar">
             <div className="max-w-sm mx-auto w-full space-y-8 py-10">
                 <div className="text-center space-y-2">
                     <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter">{t('profile_setup_title')}</h2>
