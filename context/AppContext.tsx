@@ -97,6 +97,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             id: firebaseUser.uid,
             displayName: firebaseUser.displayName || 'Cinéfilo',
             photoUrl: firebaseUser.photoURL || 'https://images.unsplash.com/photo-153571501000f-103f12a1464e?q=80&w=200&h=200&auto=format&fit=crop',
+            photos: [],
             age: 0,
             bio: '',
             favoriteGenres: [],
@@ -174,6 +175,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         id: 'demo-user',
         displayName: 'Cinéfilo Demo',
         photoUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=400&h=600&auto=format&fit=crop',
+        photos: [
+          'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=400&h=600&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=400&h=600&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1501196354995-1db52d673b2c?q=80&w=400&h=600&auto=format&fit=crop'
+        ],
         age: 27,
         bio: 'Probando la app. ¡Me encanta el cine nacional!',
         favoriteGenres: ['Ciencia Ficción', 'Cine Independiente'],
