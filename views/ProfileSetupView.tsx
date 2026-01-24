@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { User, Calendar, FileText, Film, Check } from 'lucide-react';
+import { Calendar, FileText, Film, Check, Shield, X, UserPlus } from 'lucide-react';
 import * as dbService from '../services/dbService';
 
 const ProfileSetupView: React.FC = () => {

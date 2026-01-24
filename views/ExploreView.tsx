@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { MapPin, Calendar, Popcorn, ShieldCheck, Clapperboard, Heart, Ticket, Sparkles, Flame, Star, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { calculateDistance } from '../services/locationService';
