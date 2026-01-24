@@ -44,7 +44,7 @@ const AuthView: React.FC<AuthViewProps> = ({ onBack }) => {
         <ArrowLeft size={24} />
       </button>
 
-      <div className="flex-1 flex flex-col items-center justify-center gap-8 max-w-sm mx-auto w-full">
+      <div className="flex-1 flex flex-col items-center justify-start py-8 md:py-12 gap-8 max-w-sm mx-auto w-full">
         <div className="text-center space-y-2">
           <Clapperboard className="w-12 h-12 text-red-600 mx-auto" />
           <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter">{t('auth_title')}</h2>
