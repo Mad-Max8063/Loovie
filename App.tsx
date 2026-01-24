@@ -15,7 +15,8 @@ import { MessageSquare, X } from 'lucide-react';
 const App: React.FC = () => {
   const {
     currentUser, isDemoMode, setDemoMode, login, needsProfileSetup,
-    isPremium, swipesRemaining, decrementSwipes, activeSponsor, handleApplyPromo
+    isPremium, swipesRemaining, decrementSwipes, activeSponsor, handleApplyPromo,
+    authLoading
   } = useAppContext();
   const [activeTab, setActiveTab] = useState<'explore' | 'matches' | 'profile'>('explore');
   const [appState, setAppState] = useState<'landing' | 'privacy' | 'auth' | 'app'>('landing');
@@ -57,7 +58,16 @@ const App: React.FC = () => {
           )}
 
           <div className="flex-1 relative flex flex-col overflow-hidden h-full">
-            {appState === 'landing' ? (
+            {authLoading ? (
+              <div className="flex-1 flex flex-col items-center justify-center bg-black animate-pulse">
+                <div className="w-20 h-20 bg-red-600 rounded-3xl flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(220,38,38,0.4)]">
+                  <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+                </div>
+                <h2 className="text-[10px] font-black text-white uppercase tracking-[0.4em] animate-bounce">
+                  Cargando Sala...
+                </h2>
+              </div>
+            ) : appState === 'landing' ? (
               <LandingView
                 onStartDemo={() => {
                   setPrivacyIntent('demo');

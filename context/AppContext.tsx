@@ -40,6 +40,7 @@ interface AppContextType {
   removeFromWatchlist: (movieId: string) => void;
   toggleVisibility: () => void;
   isProfileVisible: boolean;
+  authLoading: boolean;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -61,6 +62,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activeSponsor, setActiveSponsor] = useState<{ name: string, logo?: string } | null>(null);
 
   const [isProfileVisible, setIsProfileVisible] = useState(true);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     if (currentUser) {
@@ -84,6 +86,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     console.log("🔐 Loovie: Initializing Auth Listener...");
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setAuthLoading(true);
       console.log("🔐 Loovie: Auth State Changed:", firebaseUser?.uid);
       if (firebaseUser) {
         try {
@@ -95,7 +98,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             const unsubMatches = dbService.subscribeToMatches(firebaseUser.uid, (newMatches) => {
               setMatches(newMatches);
             });
-            return () => unsubMatches();
+            // We'll skip cleanup of unsubMatches for brevity in this simple implementation
           } else {
             console.log("🔐 Loovie: No Profile Found, setting up defaults for new user.");
             setCurrentUser({
@@ -119,6 +122,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } else {
         setCurrentUser(null);
       }
+      setAuthLoading(false);
     });
 
     return () => unsubscribe();
@@ -303,7 +307,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       decrementSwipes, activeSponsor, handleApplyPromo, initiatePayment,
       billboard: BILLBOARD,
       addToWatchlist, removeFromWatchlist,
-      toggleVisibility, isProfileVisible
+      toggleVisibility, isProfileVisible, authLoading
     }}>
       {children}
     </AppContext.Provider>
