@@ -141,6 +141,7 @@ export const translations = {
     profile_watchlist_add: 'Agregar a mi cita',
     profile_watchlist_remove: 'Quitar de mi cita',
     profile_watchlist_match_tag: '¡También quiere ver esta!',
+    vip_code_terms: 'Pase VIP activado. El incumplimiento de las normas de conducta anula este beneficio.',
   },
   'en-US': {
     premium_title: 'Loovie Premium',
@@ -284,5 +285,6 @@ export const translations = {
     profile_watchlist_add: 'Add to my date',
     profile_watchlist_remove: 'Remove from my date',
     profile_watchlist_match_tag: 'Also wants to see this!',
+    vip_code_terms: 'VIP Pass activated. Violation of conduct rules will void this benefit.',
   }
 };

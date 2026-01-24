@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Ticket, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
+import { useAppContext } from '../context/AppContext';
 
 interface PromoCodeSectionProps {
     onApplyPromo: (months: number) => void;
@@ -68,7 +69,11 @@ const PromoCodeSection: React.FC<PromoCodeSectionProps> = ({ onApplyPromo, brand
             {status === 'success' && (
                 <div className="mt-4 flex items-center gap-2 text-green-500 animate-in fade-in slide-in-from-top-2">
                     <Sparkles size={14} />
-                    <span className="text-[10px] font-black uppercase tracking-wider">¡Código aceptado! 1 Mes Premium Activado</span>
+                    <span className="text-[10px] font-black uppercase tracking-wider">
+                        {code.toUpperCase() === 'LOOVIE_VIP_2026'
+                            ? t('vip_code_terms')
+                            : '¡Código aceptado! 1 Mes Premium Activado'}
+                    </span>
                 </div>
             )}
 
