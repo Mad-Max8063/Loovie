@@ -67,14 +67,28 @@ const MatchesView: React.FC = () => {
                         <h3 className="font-bold text-sm text-white">{matchedUser.displayName}</h3>
                         <div className="flex items-center gap-2">
                             <span className="text-[9px] text-green-500 uppercase font-black tracking-widest">{t('chat_online')}</span>
-                            {activeMatch?.matchedMovieId && (
-                                <div className="flex items-center gap-1 bg-red-600/10 px-2 py-0.5 rounded border border-red-600/20">
-                                    <Ticket size={10} className="text-red-600" />
-                                    <span className="text-[8px] font-black text-[#d4af37] uppercase tracking-tighter">
-                                        Cita: {BILLBOARD.find(m => m.id === activeMatch.matchedMovieId)?.title}
-                                    </span>
-                                </div>
-                            )}
+                            {activeMatch?.matchedMovieId && (() => {
+                                const trustBuffer = 48 * 60 * 60 * 1000; // 48 hours
+                                const elapsed = Date.now() - activeMatch.timestamp;
+                                const isTrustBuilding = elapsed < trustBuffer;
+                                const hoursRemaining = Math.ceil((trustBuffer - elapsed) / (1000 * 60 * 60));
+
+                                return isTrustBuilding ? (
+                                    <div className="flex items-center gap-1 bg-blue-600/10 px-2 py-0.5 rounded border border-blue-600/20 animate-pulse">
+                                        <Shield size={10} className="text-blue-500" />
+                                        <span className="text-[8px] font-black text-blue-400 uppercase tracking-tighter">
+                                            {t('chat_trust_building_desc_hours').replace('{hours}', hoursRemaining.toString())}
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-1 bg-red-600/10 px-2 py-0.5 rounded border border-red-600/20">
+                                        <Ticket size={10} className="text-red-600" />
+                                        <span className="text-[8px] font-black text-[#d4af37] uppercase tracking-tighter">
+                                            Cita: {BILLBOARD.find(m => m.id === activeMatch.matchedMovieId)?.title}
+                                        </span>
+                                    </div>
+                                );
+                            })()}
                         </div>
                     </div>
 

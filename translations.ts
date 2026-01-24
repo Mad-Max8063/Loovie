@@ -147,6 +147,9 @@ export const translations = {
     profile_standby_off: 'MODO PÚBLICO (VISIBLE)',
     profile_setup_photos: 'Tus fotos (Mínimo 3)',
     profile_setup_photos_desc: 'Por seguridad, necesitás subir al menos 3 fotos reales para empezar.',
+    chat_trust_building_title: 'Protocolo de Seguridad',
+    chat_trust_building_desc_hours: 'Cita activa en {hours}h de charla previa.',
+    chat_trust_unlocked: '¡Confianza Validada!',
   },
   'en-US': {
     premium_title: 'Loovie Premium',
@@ -296,5 +299,8 @@ export const translations = {
     profile_standby_off: 'PUBLIC MODE (VISIBLE)',
     profile_setup_photos: 'Your photos (Minimum 3)',
     profile_setup_photos_desc: 'For security, you must upload at least 3 real photos to start.',
+    chat_trust_building_title: 'Safety Protocol',
+    chat_trust_building_desc_hours: 'Date active in {hours}h of chat.',
+    chat_trust_unlocked: 'Trust Validated!',
   }
 };
