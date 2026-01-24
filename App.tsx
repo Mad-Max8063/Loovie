@@ -47,8 +47,8 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen w-full bg-[#050505] flex flex-col items-center overflow-y-auto font-sans relative">
       {/* Safe Centering Wrapper for Desktop */}
-      <div className="flex-1 w-full flex flex-col items-center md:justify-start md:pt-12 p-0 z-10">
-        <div className={`w-full max-w-md bg-black shadow-[0_0_100px_rgba(0,0,0,0.9)] md:rounded-[3.5rem] md:border-[8px] border-white/5 overflow-hidden flex flex-col relative aspect-[9/19.5] min-h-[650px] h-screen md:h-[850px] md:max-h-[95vh] ${isDemoMode ? 'pt-10' : ''}`}>
+      <div className="flex-1 w-full flex flex-col items-center md:justify-start md:pt-4 p-0 z-10">
+        <div className={`my-auto w-full max-w-md bg-black shadow-[0_0_120px_rgba(0,0,0,1)] md:rounded-[3.5rem] md:border-[10px] border-white/5 overflow-hidden flex flex-col relative min-h-[550px] h-screen md:h-[min(850px,94vh)] ${isDemoMode ? 'pt-10' : ''}`}>
           {isDemoMode && (
             <DemoBanner
               onRegisterClick={() => setAppState('auth')}
@@ -56,7 +56,7 @@ const App: React.FC = () => {
             />
           )}
 
-          <div className="flex-1 relative flex flex-col overflow-hidden">
+          <div className="flex-1 relative flex flex-col overflow-hidden h-full">
             {appState === 'landing' ? (
               <LandingView
                 onStartDemo={() => {
