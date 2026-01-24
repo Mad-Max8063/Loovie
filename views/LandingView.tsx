@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppContext } from '../context/AppContext';
-import { Clapperboard, Play, Sparkles, UserPlus, LogIn } from 'lucide-react';
+import { Clapperboard, Play, Sparkles, UserPlus, LogIn, Shield } from 'lucide-react';
 
 interface LandingViewProps {
   onStartDemo: () => void;

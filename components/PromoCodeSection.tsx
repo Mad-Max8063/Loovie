@@ -8,6 +8,7 @@ interface PromoCodeSectionProps {
 }
 
 const PromoCodeSection: React.FC<PromoCodeSectionProps> = ({ onApplyPromo, brandName = "Nuestro Sponsor" }) => {
+    const { t } = useAppContext();
     const [code, setCode] = useState('');
     const [status, setStatus] = useState<'idle' | 'validating' | 'success' | 'error'>('idle');
 
