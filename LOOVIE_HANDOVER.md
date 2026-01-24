@@ -7,13 +7,12 @@ Loovie no es solo una app de citas; es una plataforma de **intención cinematogr
 
 ### Características Core:
 - **Billboard Match**: Algoritmo que agrupa usuarios por películas específicas que quieren ver de la cartelera real.
-- ### 3. Safety & Trust Protocols
-- **Identity Verification**: AI-powered biometric scan (Gemini).
-- **Mandatory 1+2 Photo Rule**: Profiles require at least 3 photos (min. 1 real face + 2 of choice) for activation. 
-- **Trust Buffer**: New matches made via "Billboard" have a mandatory 48-hour trust-building period. Movie details and meeting coordination are restricted during this timeframe to ensure safe interactions.
-- **Standby Mode**: Users can toggle off visibility at any time.
-
-## Support & Feedbackrios y validación de sponsors.
+- **Safety & Trust Protocols**:
+    - **Identity Verification**: Validación facial biométrica (Gemini).
+    - **Regla de 3 Fotos**: Perfiles requieren mín. 3 fotos reales para activación. 
+    - **Trust Buffer**: Periodo de 48h de charla obligatoria para citas por cartelera.
+    - **Modo Standby**: Control total sobre la visibilidad del perfil.
+- **Monetización**: Sistema de Paywall Premium con precio simbólico de **$2400** (en honor a los 24 fps), límites de swipes diarios y validación de sponsors.
 - **Geolocalización**: Cálculo de distancia real (Haversine) para asegurar encuentros locales.
 - **Layout Centering**: Sistema de centrado robusto para visualización en escritorio, asegurando una experiencia premium "app-first" en cualquier dispositivo.
 

@@ -103,10 +103,11 @@ loovie/
 - [x] Integración de Autenticación (Firebase Ready)
 - [x] Localización completa (es-AR/en-US)
 - [x] Implementación de Monetización (Trial Gate)
-- [ ] Backend real con base de datos
+- [x] Backend real con base de datos (Firebase Firestore)
+- [x] Implementación de Seguridad Robusta (3 fotos, Trust Buffer)
+- [x] Modo Standby para Privacidad
 - [ ] Notificaciones push
-- [ ] Chat en tiempo real
-
+- [ ] Chat en tiempo real nativo
 ---
 
 ## 🤝 Contribuir
@@ -122,5 +123,5 @@ loovie/
 <div align="center">
   <p>Hecho con ❤️ para cinéfilos</p>
   <p><sub>Idea Original de Matías Maximiliano Bernal - Powered by Google Gemini AI</sub></p>
-  <p><sub>Última actualización de despliegue: 23/01/2026 20:50</sub></p>
+  <p><sub>Última actualización de despliegue: 24/01/2026 01:40</sub></p>
 </div>
