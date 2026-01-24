@@ -102,7 +102,7 @@ const LandingView: React.FC<LandingViewProps> = ({ onStartDemo, onStartRegister,
           </div>
         </div>
 
-        <div className="absolute bottom-8 text-[8px] font-black text-neutral-600 uppercase tracking-[0.5em] opacity-50">
+        <div className="mt-20 text-[10px] font-black text-neutral-600 uppercase tracking-[0.5em] opacity-50">
           {t('landing_tagline_footer')}
         </div>
 
@@ -118,7 +118,8 @@ const LandingView: React.FC<LandingViewProps> = ({ onStartDemo, onStartRegister,
         }
       `}</style>
       </div>
-      );
+    </div>
+  );
 };
 
-      export default LandingView;
+export default LandingView;
