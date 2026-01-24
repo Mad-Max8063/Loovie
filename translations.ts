@@ -145,6 +145,8 @@ export const translations = {
     profile_visibility: 'Visibilidad del Perfil',
     profile_standby_on: 'MODO STANDBY (OCULTO)',
     profile_standby_off: 'MODO PÚBLICO (VISIBLE)',
+    profile_setup_photos: 'Tus fotos (Mínimo 3)',
+    profile_setup_photos_desc: 'Por seguridad, necesitás subir al menos 3 fotos reales para empezar.',
   },
   'en-US': {
     premium_title: 'Loovie Premium',
@@ -292,5 +294,7 @@ export const translations = {
     profile_visibility: 'Profile Visibility',
     profile_standby_on: 'STANDBY MODE (HIDDEN)',
     profile_standby_off: 'PUBLIC MODE (VISIBLE)',
+    profile_setup_photos: 'Your photos (Minimum 3)',
+    profile_setup_photos_desc: 'For security, you must upload at least 3 real photos to start.',
   }
 };

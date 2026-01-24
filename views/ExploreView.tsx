@@ -18,6 +18,24 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSwipe, swipesRemaining }) =
   const [showMatchAnimation, setShowMatchAnimation] = useState(false);
 
   const user = potentials[0];
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0);
+
+  // Reset indicator when user changes
+  useEffect(() => {
+    setActivePhotoIdx(0);
+  }, [user?.id]);
+
+  const handleNextPhoto = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user.photos) return;
+    setActivePhotoIdx((prev) => (prev + 1) % user.photos.length);
+  };
+
+  const handlePrevPhoto = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user.photos) return;
+    setActivePhotoIdx((prev) => (prev - 1 + user.photos.length) % user.photos.length);
+  };
 
   const handleSwipeLeft = () => {
     if (!user || swipeState !== 'none' || isBurning) return;
@@ -98,10 +116,30 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSwipe, swipesRemaining }) =
         {/* Contenido Principal (El Fotograma) */}
         <div className="flex-1 relative overflow-hidden group">
           <img
-            src={user.photoUrl}
+            src={user.photos?.[activePhotoIdx] || user.photoUrl}
             alt={user.displayName}
-            className={`w-full h-full object-cover transition-all duration-700 ${isBurning ? 'sepia contrast-150 brightness-150 blur-sm' : 'brightness-90 group-hover:scale-105'}`}
+            className={`w-full h-full object-cover transition-all duration-700 ${isBurning ? 'sepia contrast-150 brightness-150 blur-sm' : 'brightness-90'}`}
           />
+
+          {/* Photo Navigation Tap Areas */}
+          {!isBurning && !showMatchAnimation && (
+            <div className="absolute inset-0 z-20 flex">
+              <div className="flex-1 cursor-pointer" onClick={handlePrevPhoto}></div>
+              <div className="flex-1 cursor-pointer" onClick={handleNextPhoto}></div>
+            </div>
+          )}
+
+          {/* Photo Indicator Segments */}
+          {user.photos && user.photos.length > 1 && (
+            <div className="absolute top-4 left-6 right-6 z-30 flex gap-1.5 px-2">
+              {user.photos.map((_, idx) => (
+                <div
+                  key={idx}
+                  className={`h-1 flex-1 rounded-full transition-all duration-300 ${idx === activePhotoIdx ? 'bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]' : 'bg-white/30'}`}
+                />
+              ))}
+            </div>
+          )}
 
           <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] animate-grain"></div>
 
@@ -131,7 +169,7 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSwipe, swipesRemaining }) =
             </div>
           )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-6">
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-6 z-10">
             <div className="mb-4">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">

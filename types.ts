@@ -11,6 +11,7 @@ export interface UserProfile {
   id: string;
   displayName: string;
   photoUrl: string;
+  photos: string[];
   age: number;
   bio: string;
   favoriteGenres: string[];
