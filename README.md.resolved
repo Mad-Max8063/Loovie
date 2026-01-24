@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" alt="CineMatch Banner" width="100%" />
+  <img src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" alt="Loovie Banner" width="100%" />
   
   # 🎬 Loovie
   
@@ -61,7 +61,7 @@ La demo incluye un pase de **10 swipes** gratuitos para explorar la experiencia.
 ## 📂 Estructura del Proyecto
 
 ```
-cine-match/
+loovie/
 ├── App.tsx                 # App principal con estado de demo/registro
 ├── components/
 │   ├── Layout.tsx          # Navegación y estructura

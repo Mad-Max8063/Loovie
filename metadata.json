@@ -1,6 +1,6 @@
 {
-  "name": "CineMatch",
-  "description": "Find your perfect cinema companion with CineMatch. Swipe through movie lovers, match based on shared film tastes, and never watch a movie alone again.",
+  "name": "Loovie",
+  "description": "Find your perfect cinema companion with Loovie. Swipe through movie lovers, match based on shared film tastes, and never watch a movie alone again.",
   "requestFramePermissions": [
     "camera",
     "geolocation"
