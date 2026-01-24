@@ -16,9 +16,10 @@ const PromoCodeSection: React.FC<PromoCodeSectionProps> = ({ onApplyPromo, brand
 
         // Simulación de validación de código de marca
         setTimeout(() => {
-            if (code.toUpperCase() === 'LOOVIE2026' || code.toUpperCase() === 'CINEPROMO') {
+            const upperCode = code.toUpperCase();
+            if (upperCode === 'LOOVIE2026' || upperCode === 'CINEPROMO' || upperCode === 'LOOVIE_VIP_2026') {
                 setStatus('success');
-                onApplyPromo(1); // 1 mes gratis
+                onApplyPromo(upperCode === 'LOOVIE_VIP_2026' ? 9999 : 1);
             } else {
                 setStatus('error');
                 setTimeout(() => setStatus('idle'), 3000);

@@ -161,7 +161,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const handleApplyPromo = (months: number) => {
     setIsPremium(true);
-    setSwipesRemaining(999);
+    setSwipesRemaining(months > 12 ? 9999 : 999);
   };
 
   const initiatePayment = () => {
