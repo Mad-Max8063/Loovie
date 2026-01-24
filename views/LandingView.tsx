@@ -56,9 +56,42 @@ const LandingView: React.FC<LandingViewProps> = ({ onStartDemo, onStartRegister,
           )}
         </div>
 
-        <p className="text-xl text-neutral-300 font-bold uppercase tracking-widest leading-relaxed mb-10">
+        <p className="text-xl text-neutral-300 font-bold uppercase tracking-widest leading-relaxed mb-6">
           {t('landing_tagline')}
         </p>
+
+        {/* Feature Highlights Section */}
+        <div className="w-full grid grid-cols-1 gap-3 mb-12 text-left">
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div className="p-3 bg-red-600/20 rounded-xl flex-shrink-0">
+              <Play size={20} className="text-red-500" />
+            </div>
+            <div>
+              <h3 className="text-[11px] font-black text-white uppercase tracking-wider mb-1">Cita por Cartelera</h3>
+              <p className="text-[10px] text-neutral-500 leading-relaxed">Hacé match con gente que quiere ver la misma película que vos hoy.</p>
+            </div>
+          </div>
+
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4 animate-in fade-in slide-in-from-bottom-2 duration-700">
+            <div className="p-3 bg-blue-600/20 rounded-xl flex-shrink-0">
+              <Sparkles size={20} className="text-blue-500" />
+            </div>
+            <div>
+              <h3 className="text-[11px] font-black text-white uppercase tracking-wider mb-1">Icebreakers IA</h3>
+              <p className="text-[10px] text-neutral-500 leading-relaxed">Gemini genera el primer mensaje perfecto basado en sus gustos cinéfilos.</p>
+            </div>
+          </div>
+
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4 animate-in fade-in slide-in-from-bottom-2 duration-1000">
+            <div className="p-3 bg-green-600/20 rounded-xl flex-shrink-0">
+              <Shield size={20} className="text-green-500" />
+            </div>
+            <div>
+              <h3 className="text-[11px] font-black text-white uppercase tracking-wider mb-1">Cinéfilos Reales</h3>
+              <p className="text-[10px] text-neutral-500 leading-relaxed">Validación facial por IA para que tus citas sean seguras y reales.</p>
+            </div>
+          </div>
+        </div>
 
         <div className="flex flex-col gap-4 w-full mt-auto">
           {/* Primary CTA - Register */}

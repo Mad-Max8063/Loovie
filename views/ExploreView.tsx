@@ -149,11 +149,16 @@ const ExploreView: React.FC<ExploreViewProps> = ({ onSwipe, swipesRemaining }) =
 
               {/* Sello de Película Compartida */}
               {user.watchlist?.some(mId => currentUser?.watchlist?.includes(mId)) && (
-                <div className="flex items-center gap-2 mt-2 bg-gradient-to-r from-red-600/20 to-[#d4af37]/20 border border-[#d4af37]/40 px-3 py-1.5 rounded-xl self-start animate-in slide-in-from-left duration-500">
-                  <Ticket size={14} className="text-[#d4af37] fill-[#d4af37]/20" />
-                  <span className="text-[9px] font-black text-white uppercase tracking-wider">
-                    {t('profile_watchlist_match_tag')}
-                  </span>
+                <div className="flex flex-col items-start gap-1 mt-2 animate-in slide-in-from-left duration-500">
+                  <div className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-[#d4af37] px-3 py-1.5 rounded-xl shadow-[0_0_20px_rgba(212,175,55,0.4)]">
+                    <Ticket size={14} className="text-white fill-white/20" />
+                    <span className="text-[10px] font-black text-white uppercase tracking-wider">
+                      {t('profile_watchlist_match_tag')}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-[#d4af37] font-black uppercase tracking-tighter opacity-80 pl-1">
+                    ¡Ambos quieren ver la misma peli!
+                  </p>
                 </div>
               )}
 

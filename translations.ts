@@ -65,7 +65,7 @@ export const translations = {
     landing_subtitle: 'MATCH',
     landing_tagline: 'Nunca vuelvas a ver una película en soledad.',
     landing_demo_btn: 'PROBAR DEMO',
-    landing_demo_desc: 'La demo incluye perfiles de ejemplo para explorar la experiencia.',
+    landing_demo_desc: 'Explorá perfiles y descubrí cómo hacer match por películas en cartelera.',
     landing_tagline_footer: 'Curated for Cinephiles',
     auth_title: 'PRIMERA FILA',
     auth_subtitle: 'Entrá para encontrar tu compañero ideal',
