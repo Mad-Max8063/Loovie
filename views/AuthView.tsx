@@ -29,10 +29,18 @@ const AuthView: React.FC<AuthViewProps> = ({ onBack }) => {
 
   const handleGoogle = async () => {
     setLoading(true);
+    setError('');
     try {
       await login('google');
-    } catch (err) {
-      setError('Error with Google Sign-in');
+    } catch (err: any) {
+      console.error("AuthView: Google Error", err);
+      if (err.code === 'auth/popup-blocked') {
+        setError('El navegador bloqueó la ventana emergente. Por favor, permití los popups.');
+      } else if (err.code === 'auth/network-request-failed') {
+        setError('Error de conexión. Revisá tu internet.');
+      } else {
+        setError('Error al conectar con Google. Reintentá en un momento.');
+      }
     } finally {
       setLoading(false);
     }

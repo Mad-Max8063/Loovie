@@ -82,30 +82,38 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   useEffect(() => {
+    console.log("🔐 Loovie: Initializing Auth Listener...");
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log("🔐 Loovie: Auth State Changed:", firebaseUser?.uid);
       if (firebaseUser) {
-        const profile = await dbService.getUser(firebaseUser.uid);
-        if (profile) {
-          setCurrentUser(profile);
-          setNeedsProfileSetup(false);
-          const unsubMatches = dbService.subscribeToMatches(firebaseUser.uid, (newMatches) => {
-            setMatches(newMatches);
-          });
-          return () => unsubMatches();
-        } else {
-          setCurrentUser({
-            id: firebaseUser.uid,
-            displayName: firebaseUser.displayName || 'Cinéfilo',
-            photoUrl: firebaseUser.photoURL || 'https://images.unsplash.com/photo-153571501000f-103f12a1464e?q=80&w=200&h=200&auto=format&fit=crop',
-            photos: [],
-            age: 0,
-            bio: '',
-            favoriteGenres: [],
-            availability: [],
-            intentMode: IntentMode.FRIENDSHIP,
-            isVisible: true
-          });
-          setNeedsProfileSetup(true);
+        try {
+          const profile = await dbService.getUser(firebaseUser.uid);
+          if (profile) {
+            console.log("🔐 Loovie: Profile Found:", profile.displayName);
+            setCurrentUser(profile);
+            setNeedsProfileSetup(false);
+            const unsubMatches = dbService.subscribeToMatches(firebaseUser.uid, (newMatches) => {
+              setMatches(newMatches);
+            });
+            return () => unsubMatches();
+          } else {
+            console.log("🔐 Loovie: No Profile Found, setting up defaults for new user.");
+            setCurrentUser({
+              id: firebaseUser.uid,
+              displayName: firebaseUser.displayName || 'Cinéfilo',
+              photoUrl: firebaseUser.photoURL || 'https://images.unsplash.com/photo-153571501000f-103f12a1464e?q=80&w=200&h=200&auto=format&fit=crop',
+              photos: [],
+              age: 0,
+              bio: '',
+              favoriteGenres: [],
+              availability: [],
+              intentMode: IntentMode.FRIENDSHIP,
+              isVisible: true
+            });
+            setNeedsProfileSetup(true);
+          }
+        } catch (err) {
+          console.error("❌ Loovie: Error in profile retrieval:", err);
         }
         setIsDemoMode(false);
       } else {
@@ -143,18 +151,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const login = async (method: 'google' | 'email' = 'google', email?: string, password?: string, isSignup?: boolean) => {
+    console.log(`🔐 Loovie: Attempting login with method: ${method}`);
     try {
       if (method === 'google') {
-        await signInWithPopup(auth, googleProvider);
+        const result = await signInWithPopup(auth, googleProvider);
+        console.log("🔐 Loovie: Google Login Success:", result.user.email);
       } else if (method === 'email' && email && password) {
         if (isSignup) {
-          await createUserWithEmailAndPassword(auth, email, password);
+          const result = await createUserWithEmailAndPassword(auth, email, password);
+          console.log("🔐 Loovie: Email Signup Success:", result.user.email);
         } else {
-          await signInWithEmailAndPassword(auth, email, password);
+          const result = await signInWithEmailAndPassword(auth, email, password);
+          console.log("🔐 Loovie: Email Login Success:", result.user.email);
         }
       }
-    } catch (error) {
-      console.error("Auth Error:", error);
+    } catch (error: any) {
+      console.error("❌ Loovie: Login Error Details:", {
+        code: error.code,
+        message: error.message,
+        method
+      });
       throw error;
     }
   };
