@@ -150,6 +150,12 @@ export const translations = {
     chat_trust_building_title: 'Protocolo de Seguridad',
     chat_trust_building_desc_hours: 'Cita activa en {hours}h de charla previa.',
     chat_trust_unlocked: '¡Confianza Validada!',
+    landing_feature_billboard_title: 'Cita por Cartelera',
+    landing_feature_billboard_desc: 'Conectá con personas que quieren disfrutar los mismos estrenos que vos.',
+    landing_feature_icebreaker_title: 'Icebreakers IA',
+    landing_feature_icebreaker_desc: 'Gemini genera el primer mensaje perfecto basado en sus gustos cinéfilos.',
+    landing_feature_verified_title: 'Cinéfilos Reales',
+    landing_feature_verified_desc: 'Validación facial por IA para que tus citas sean seguras y reales.',
   },
   'en-US': {
     premium_title: 'Loovie Premium',
@@ -302,5 +308,11 @@ export const translations = {
     chat_trust_building_title: 'Safety Protocol',
     chat_trust_building_desc_hours: 'Date active in {hours}h of chat.',
     chat_trust_unlocked: 'Trust Validated!',
+    landing_feature_billboard_title: 'Billboard Dates',
+    landing_feature_billboard_desc: 'Connect with people who want to see the same upcoming movies as you.',
+    landing_feature_icebreaker_title: 'AI Icebreakers',
+    landing_feature_icebreaker_desc: 'Gemini generates the perfect first message based on your movie tastes.',
+    landing_feature_verified_title: 'Real Cinephiles',
+    landing_feature_verified_desc: 'AI face validation to ensure your dates are safe and real.',
   }
 };

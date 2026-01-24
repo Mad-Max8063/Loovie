@@ -67,8 +67,8 @@ const LandingView: React.FC<LandingViewProps> = ({ onStartDemo, onStartRegister,
               <Play size={20} className="text-red-500" />
             </div>
             <div>
-              <h3 className="text-[11px] font-black text-white uppercase tracking-wider mb-1">Cita por Cartelera</h3>
-              <p className="text-[10px] text-neutral-500 leading-relaxed">Hacé match con gente que quiere ver la misma película que vos hoy.</p>
+              <h3 className="text-[11px] font-black text-white uppercase tracking-wider mb-1">{t('landing_feature_billboard_title')}</h3>
+              <p className="text-[10px] text-neutral-500 leading-relaxed">{t('landing_feature_billboard_desc')}</p>
             </div>
           </div>
 
@@ -77,8 +77,8 @@ const LandingView: React.FC<LandingViewProps> = ({ onStartDemo, onStartRegister,
               <Sparkles size={20} className="text-blue-500" />
             </div>
             <div>
-              <h3 className="text-[11px] font-black text-white uppercase tracking-wider mb-1">Icebreakers IA</h3>
-              <p className="text-[10px] text-neutral-500 leading-relaxed">Gemini genera el primer mensaje perfecto basado en sus gustos cinéfilos.</p>
+              <h3 className="text-[11px] font-black text-white uppercase tracking-wider mb-1">{t('landing_feature_icebreaker_title')}</h3>
+              <p className="text-[10px] text-neutral-500 leading-relaxed">{t('landing_feature_icebreaker_desc')}</p>
             </div>
           </div>
 
@@ -87,8 +87,8 @@ const LandingView: React.FC<LandingViewProps> = ({ onStartDemo, onStartRegister,
               <Shield size={20} className="text-green-500" />
             </div>
             <div>
-              <h3 className="text-[11px] font-black text-white uppercase tracking-wider mb-1">Cinéfilos Reales</h3>
-              <p className="text-[10px] text-neutral-500 leading-relaxed">Validación facial por IA para que tus citas sean seguras y reales.</p>
+              <h3 className="text-[11px] font-black text-white uppercase tracking-wider mb-1">{t('landing_feature_verified_title')}</h3>
+              <p className="text-[10px] text-neutral-500 leading-relaxed">{t('landing_feature_verified_desc')}</p>
             </div>
           </div>
         </div>
