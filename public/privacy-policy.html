@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidad — Loovie</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      line-height: 1.8;
+      padding: 2rem 1.5rem;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      font-size: 0.85rem;
+      color: #d4af37;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 2rem;
+    }
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    p, li { font-size: 0.9rem; color: #a3a3a3; }
+    ul { padding-left: 1.5rem; margin: 0.5rem 0; }
+    li { margin-bottom: 0.5rem; }
+    strong { color: #d4d4d4; }
+    a { color: #d4af37; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .effective-date {
+      font-size: 0.8rem;
+      color: #525252;
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .warning-box {
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .warning-box p { color: #d4af37; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Política de Privacidad</h1>
+    <p class="subtitle">Loovie — Encontrá tu compañero de cine</p>
+
+    <p>Esta política describe cómo <strong>Max Devs Solutions</strong> ("nosotros", "nuestro") recopila, usa y protege la información personal de los usuarios de <strong>Loovie</strong> ("la App").</p>
+
+    <h2>1. Información que Recopilamos</h2>
+    <ul>
+      <li><strong>Datos de cuenta:</strong> Dirección de email, nombre y foto de perfil (via Google Sign-In o registro con email).</li>
+      <li><strong>Perfil de usuario:</strong> Edad, biografía, géneros cinematográficos favoritos, disponibilidad y modo de intención social.</li>
+      <li><strong>Fotos:</strong> Fotos de perfil que el usuario elige subir voluntariamente.</li>
+      <li><strong>Ubicación aproximada:</strong> Si el usuario lo permite, accedemos a la ubicación aproximada (ACCESS_COARSE_LOCATION) para mostrar usuarios cercanos. <strong>No</strong> utilizamos ubicación precisa.</li>
+      <li><strong>Datos de uso:</strong> Interacciones dentro de la app (likes, matches, mensajes).</li>
+      <li><strong>Lista de seguimiento:</strong> Las películas que el usuario agrega a su watchlist.</li>
+    </ul>
+
+    <h2>2. Procesamiento Biométrico</h2>
+    <div class="warning-box">
+      <p><strong>⚠️ Importante:</strong> Este procesamiento SOLO ocurre si el usuario otorga su consentimiento explícito previo.</p>
+    </div>
+    <p>Loovie ofrece una función opcional de <strong>verificación de identidad</strong> que utiliza la cámara del dispositivo para capturar una selfie.</p>
+    <ul>
+      <li>La imagen es procesada por <strong>Google Gemini AI</strong> (servicio de Google LLC) para verificar que es una persona real y no una foto de pantalla, máscara o imagen impresa.</li>
+      <li>Las imágenes se envían a los servidores de Google <strong>únicamente</strong> para el análisis puntual de la verificación.</li>
+      <li><strong>No almacenamos</strong> las imágenes de verificación en nuestros servidores.</li>
+      <li><strong>No utilizamos</strong> los datos biométricos para entrenar modelos de inteligencia artificial.</li>
+      <li>El usuario puede revocar su consentimiento en cualquier momento desde la sección de Perfil.</li>
+    </ul>
+
+    <h2>3. Cómo Usamos la Información</h2>
+    <ul>
+      <li>Proveer la funcionalidad de matching basada en gustos cinematográficos.</li>
+      <li>Mostrar cartelera de cines argentinos actualizada (datos de TMDB, The Movie Database).</li>
+      <li>Generar recomendaciones de películas personalizadas mediante IA.</li>
+      <li>Facilitar la comunicación entre usuarios que hicieron match.</li>
+      <li>Mejorar la experiencia y seguridad de la plataforma.</li>
+    </ul>
+
+    <h2>4. Almacenamiento y Seguridad</h2>
+    <ul>
+      <li>Los datos se almacenan en <strong>Google Firebase</strong> (Cloud Firestore), alojado en la infraestructura de Google Cloud Platform.</li>
+      <li>La autenticación es gestionada por <strong>Firebase Authentication</strong>, que utiliza estándares de seguridad de la industria (OAuth 2.0, tokens cifrados).</li>
+      <li>Las comunicaciones entre la app y los servidores se realizan mediante <strong>HTTPS</strong> con cifrado TLS.</li>
+    </ul>
+
+    <h2>5. Compartir Información con Terceros</h2>
+    <p>No vendemos ni compartimos información personal con terceros para fines de marketing. Los datos solo se comparten con:</p>
+    <ul>
+      <li><strong>Google LLC:</strong> Para autenticación (Firebase Auth), almacenamiento (Firestore), y verificación de identidad (Gemini AI).</li>
+      <li><strong>TMDB (The Movie Database):</strong> Para obtener información de películas en cartelera. No se envían datos de usuarios a TMDB.</li>
+    </ul>
+
+    <h2>6. Derechos del Usuario</h2>
+    <p>En conformidad con la <strong>Ley 25.326 de Protección de Datos Personales</strong> (Argentina), tenés derecho a:</p>
+    <ul>
+      <li><strong>Acceso:</strong> Solicitar una copia de tus datos personales.</li>
+      <li><strong>Rectificación:</strong> Corregir datos inexactos o incompletos.</li>
+      <li><strong>Supresión:</strong> Solicitar la eliminación de tu cuenta y datos asociados.</li>
+      <li><strong>Revocación:</strong> Revocar el consentimiento para el procesamiento biométrico.</li>
+    </ul>
+    <p>Para ejercer estos derechos, contactanos a: <a href="mailto:maxdevssolutions@gmail.com">maxdevssolutions@gmail.com</a></p>
+
+    <h2>7. Retención de Datos</h2>
+    <p>Conservamos los datos de tu cuenta mientras ésta permanezca activa. Al eliminar tu cuenta, todos los datos personales son eliminados de nuestros sistemas dentro de los <strong>30 días</strong> siguientes.</p>
+
+    <h2>8. Usuarios Menores de Edad</h2>
+    <p>Loovie está diseñada para usuarios <strong>mayores de 18 años</strong>. No recopilamos intencionalmente información de menores de edad.</p>
+
+    <h2>9. Cambios a esta Política</h2>
+    <p>Nos reservamos el derecho de actualizar esta política. Los cambios serán notificados a través de la app y publicados en esta URL.</p>
+
+    <h2>10. Contacto</h2>
+    <p>
+      <strong>Max Devs Solutions</strong><br>
+      Email: <a href="mailto:maxdevssolutions@gmail.com">maxdevssolutions@gmail.com</a><br>
+      Argentina
+    </p>
+
+    <p class="effective-date">Última actualización: Mayo 2026</p>
+  </div>
+</body>
+</html>

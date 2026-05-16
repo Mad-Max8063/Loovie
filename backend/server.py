@@ -5,6 +5,7 @@ from typing import List, Optional
 from dotenv import load_dotenv
 import os
 import uuid
+import httpx
 
 load_dotenv()
 
@@ -22,6 +23,17 @@ app.add_middleware(
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY")
+TMDB_API_KEY = os.environ.get("TMDB_API_KEY", "")
+TMDB_BASE = "https://api.themoviedb.org/3"
+
+# Genre ID -> Spanish name mapping (TMDB uses numeric IDs)
+TMDB_GENRE_MAP = {
+    28: "Acción", 12: "Aventura", 16: "Animación", 35: "Comedia",
+    80: "Crimen", 99: "Documental", 18: "Drama", 10751: "Familia",
+    14: "Fantasía", 36: "Histórico", 27: "Terror", 10402: "Musical",
+    9648: "Suspenso", 10749: "Romance", 878: "Ciencia Ficción",
+    10770: "TV Movie", 53: "Thriller", 10752: "Bélica", 37: "Western"
+}
 
 class GenresRequest(BaseModel):
     genres: List[str]
@@ -40,6 +52,62 @@ class MovieRecommendation(BaseModel):
 @app.get("/api/health")
 async def health_check():
     return {"status": "ok", "service": "cinematch"}
+
+
+class BillboardMovie(BaseModel):
+    id: str
+    title: str
+    description: str
+    imageUrl: str
+    genres: List[str]
+    releaseDate: str
+    isPremiere: bool = False
+
+
+@app.get("/api/billboard", response_model=List[BillboardMovie])
+async def get_billboard():
+    """Get current movies playing in Argentine theaters from TMDB"""
+    if not TMDB_API_KEY:
+        raise HTTPException(status_code=500, detail="TMDB API Key not configured")
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"{TMDB_BASE}/movie/now_playing",
+                params={
+                    "api_key": TMDB_API_KEY,
+                    "language": "es-AR",
+                    "region": "AR",
+                    "page": 1
+                }
+            )
+            response.raise_for_status()
+            data = response.json()
+
+        from datetime import datetime, timedelta
+        recent_cutoff = (datetime.now() - timedelta(days=14)).strftime("%Y-%m-%d")
+
+        movies: List[BillboardMovie] = []
+        for m in data.get("results", [])[:10]:  # Top 10 movies
+            genres = [TMDB_GENRE_MAP.get(gid, "Otro") for gid in m.get("genre_ids", [])]
+            poster = f"https://image.tmdb.org/t/p/w500{m['poster_path']}" if m.get("poster_path") else ""
+            release = m.get("release_date", "")
+
+            movies.append(BillboardMovie(
+                id=str(m["id"]),
+                title=m.get("title", "Sin título"),
+                description=m.get("overview", ""),
+                imageUrl=poster,
+                genres=genres,
+                releaseDate=release,
+                isPremiere=(release >= recent_cutoff)
+            ))
+
+        return movies
+
+    except httpx.HTTPError as e:
+        print(f"TMDB API error: {e}")
+        raise HTTPException(status_code=502, detail="Could not fetch billboard from TMDB")
 
 @app.post("/api/recommendations", response_model=List[MovieRecommendation])
 async def get_movie_recommendations(request: GenresRequest):

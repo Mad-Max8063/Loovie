@@ -2,10 +2,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { Camera, ShieldCheck, ArrowLeft, RefreshCw, Lock, UserCheck, AlertCircle, Sparkles } from 'lucide-react';
+import ConsentBiometricView from './ConsentBiometricView';
 import { GoogleGenAI } from "@google/genai";
 
 const IdentityVerification: React.FC<{ onBack: () => void }> = ({ onBack }) => {
-  const { t, setUserVerified } = useAppContext();
+  const { t, setUserVerified, biometricConsentGiven, grantBiometricConsent, revokeBiometricConsent } = useAppContext();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -106,6 +107,19 @@ const IdentityVerification: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       setIsVerifying(false);
     }
   };
+
+  // Gate: require explicit biometric consent before showing camera
+  if (!biometricConsentGiven) {
+    return (
+      <ConsentBiometricView
+        onAccept={grantBiometricConsent}
+        onDecline={() => {
+          revokeBiometricConsent();
+          onBack();
+        }}
+      />
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-[100] bg-black flex flex-col p-6 animate-in fade-in duration-500 overflow-hidden">

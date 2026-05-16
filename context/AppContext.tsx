@@ -6,6 +6,7 @@ import { shouldMatch } from '../services/matchingService';
 import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '../services/firebase';
 import * as dbService from '../services/dbService';
 import * as chatService from '../services/chatService';
+import { fetchBillboard } from '../services/billboardService';
 
 interface AppContextType {
   currentUser: UserProfile | null;
@@ -41,6 +42,9 @@ interface AppContextType {
   toggleVisibility: () => void;
   isProfileVisible: boolean;
   authLoading: boolean;
+  biometricConsentGiven: boolean;
+  grantBiometricConsent: () => void;
+  revokeBiometricConsent: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -63,6 +67,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [isProfileVisible, setIsProfileVisible] = useState(true);
   const [authLoading, setAuthLoading] = useState(true);
+
+  // Biometric consent state (persisted in localStorage)
+  const [biometricConsentGiven, setBiometricConsentGiven] = useState<boolean>(
+    () => localStorage.getItem('loovie_biometric_consent') === 'true'
+  );
+  const grantBiometricConsent = () => {
+    localStorage.setItem('loovie_biometric_consent', 'true');
+    setBiometricConsentGiven(true);
+  };
+  const revokeBiometricConsent = () => {
+    localStorage.removeItem('loovie_biometric_consent');
+    setBiometricConsentGiven(false);
+  };
+
+  // Dynamic billboard (fetched from TMDB API, fallback to static)
+  const [billboard, setBillboard] = useState<Movie[]>(BILLBOARD);
 
   useEffect(() => {
     if (currentUser) {
@@ -145,6 +165,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     setActiveSponsor({ name: 'Loovie Prime' });
+  }, []);
+
+  // Fetch billboard from TMDB on mount
+  useEffect(() => {
+    fetchBillboard()
+      .then(movies => {
+        if (movies.length > 0) {
+          setBillboard(movies);
+        }
+      })
+      .catch(err => {
+        console.error('🎬 Loovie: Using static billboard as fallback', err);
+      });
   }, []);
 
   const refreshProfile = async () => {
@@ -305,9 +338,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       isDemoMode, setDemoMode, needsProfileSetup, setActiveChatId,
       refreshProfile, isPremium, setIsPremium, swipesRemaining,
       decrementSwipes, activeSponsor, handleApplyPromo, initiatePayment,
-      billboard: BILLBOARD,
+      billboard: billboard,
       addToWatchlist, removeFromWatchlist,
-      toggleVisibility, isProfileVisible, authLoading
+      toggleVisibility, isProfileVisible, authLoading,
+      biometricConsentGiven, grantBiometricConsent, revokeBiometricConsent
     }}>
       {children}
     </AppContext.Provider>
