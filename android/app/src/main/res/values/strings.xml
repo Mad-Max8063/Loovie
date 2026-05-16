@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Loovie</string>
+    <string name="title_activity_main">Loovie</string>
+    <string name="package_name">com.loovie.app</string>
+    <string name="custom_url_scheme">com.loovie.app</string>
+</resources>

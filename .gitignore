@@ -30,3 +30,7 @@ dist-ssr
 # Environment files
 *.env
 *.env.*
+
+# Keystore files
+*.jks
+*.keystore
